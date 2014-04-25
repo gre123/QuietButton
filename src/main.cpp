@@ -8,8 +8,8 @@ int main()
     int threshold_value = 0;
     int threshold_type = 3;
     int level=200;
-    int levelBin=85;
-    int levelBin2=104;
+    int levelBin=30;
+    int levelBin2=30;
 
     int const max_value = 255;
     int const max_type = 4;
@@ -18,7 +18,7 @@ int main()
     char* resultWindowName = "result window";
     int matchMethod=1;
     int optionOfDisplay=0;//0 -zbinaryzowany obraz 1- splot
-    VideoCapture capture("D:/Grzesiek/C++ pliki/QuietButton/klawiatura/v1.avi"); // open the video file for reading
+    VideoCapture capture("D:/Grzesiek/C++ pliki/QuietButton/klawiatura/v4.avi"); // open the video file for reading
     //VideoCapture capture(0); // open the video camera no. 0
     if (!capture.isOpened()){
          cout << "Cannot open the video file" << endl;

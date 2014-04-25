@@ -107,17 +107,40 @@ if (whichMarker==2){
 }
 return findedMarker;
 }
+void cien(Mat &obr,Mat tlo,int p){
+    Mat wodj,wtlo,wobr,ob1,ob2,ob3,se;
+//    absdiff(obr,tlo,wodj);
+//    cvtColor(wodj,wodj,CV_RGB2YCrCb);
+//
+//    threshold(wodj,wodj,140,255,THRESH_BINARY);
+//
+//    cvtColor(wodj,wodj,CV_YCrCb2RGB);
+//    cvtColor(wodj,wodj,CV_RGB2GRAY);
+//    medianBlur(wodj,wodj,5);
+//    //threshold(wodj,wodj,p,255,THRESH_BINARY);
+//    obr=wodj;
+}
+
 
 void odejm(Mat &obr,Mat tlo,int p, int q){
     Mat wodj,wtlo,wobr,ob1,ob2,ob3,se;
     Mat kanaly[3];
-    //absdiff(obr,tlo,wodj);
-    cvtColor(obr,wobr,CV_RGB2YCrCb);
-    split(wobr,kanaly);
-    threshold(kanaly[2],ob1,p,255,THRESH_BINARY);
-    threshold(kanaly[2],ob2,q,255,THRESH_BINARY_INV);
+    absdiff(obr,tlo,wodj);
+    //cvtColor(wodj,wodj,CV_RGB2YCrCb);
+   // split(wodj,kanaly);
+    //threshold(wodj,wodj,150,255,THRESH_BINARY);
+
+    //cvtColor(wodj,wodj,CV_YCrCb2RGB);
+    cvtColor(wodj,wodj,CV_RGB2GRAY);
+    threshold(wodj,wodj,p,255,THRESH_BINARY);
+//    erode(wodj,ob3,0,Point(-1,-1),5,2,1);
+//    erode(ob3,ob3,0,Point(-1,-1),5,2,1);
+//    cvtColor(obr,wobr,CV_RGB2YCrCb);
+//    split(wobr,kanaly);
+//    threshold(kanaly[2],ob1,p,255,THRESH_BINARY);
+//    threshold(kanaly[2],ob2,q,255,THRESH_BINARY_INV);
 //    bitwise_not(ob2,ob2);
-    bitwise_and(ob1,ob2,ob3);
+   // bitwise_and(ob1,ob2,ob3);
 
 //    threshold(kanaly[2],ob1,p,255,THRESH_BINARY);
 //    threshold(kanaly[2],ob2,q,255,THRESH_BINARY_INV);
@@ -125,20 +148,11 @@ void odejm(Mat &obr,Mat tlo,int p, int q){
 
  //   bitwise_and(ob1,ob2,ob2);
  //   bitwise_and(ob3,ob2,ob3);
-    erode(ob3,ob3,0,Point(-1,-1),4,1,1);
-    obr=ob3;
+
+    obr=wodj;
 }
 
 
-void ruch(Mat &obr,Mat poprz){
-    Mat wobr,wodj;
-    cvtColor(obr,wobr,CV_RGB2YCrCb);
-   // absdiff(wobr,poprz,wodj);
-    //threshold(wodj,wodj,60,255,THRESH_BINARY);
-    //obr=wodj;
-    obr=wobr;
-
-}
 
 cv::Mat shiftFrame(Mat frame, int horizontalShift, int verticalShift){
     //create a same sized temporary Mat with all the pixels flagged as invalid (-1)

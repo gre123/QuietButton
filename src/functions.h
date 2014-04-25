@@ -13,7 +13,7 @@ vector<Point>* matchingMethod(int match_method, int optionOfDisplay,Mat &sourceI
 void levelOutImage(vector<Point>* markers,Mat &sourceImage);
 int findMarker(vector<Point>* markers,int whichMarker);
 Mat Shift_Image_to_Right( Mat src_in, int num_pixels);
-void ruch(Mat &obr,Mat poprz);
+void cien(Mat &obr,Mat tlo,int p);
 void odejm(Mat &obr,Mat tlo,int p,int q);
 Mat shiftFrame(Mat frame, int horizontalShift, int verticalShift);
 #endif

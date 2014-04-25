@@ -8,6 +8,9 @@ int main()
     int threshold_value = 0;
     int threshold_type = 3;
     int level=200;
+    int levelBin=85;
+    int levelBin2=104;
+
     int const max_value = 255;
     int const max_type = 4;
     int const max_BINARY_value = 255;
@@ -36,6 +39,8 @@ int main()
  // createTrackbar( trackbar_label, resultWindowName, &matchMethod, 4, 0 );
 
    createTrackbar( trackbar_type, resultWindowName, &level, 255, 0 );
+   createTrackbar( "level1", mainWindowName, &levelBin, 255, 0 );
+   createTrackbar( "level2", mainWindowName, &levelBin2, 255, 0 );
 
 Mat frame;
 Mat frameGray;
@@ -60,7 +65,7 @@ while(capture.read(frame)){
         background=frame;
         czyOne=false;
     }
-    odejm(frame,background);
+    odejm(frame,background,levelBin,levelBin2);
 
     ///Displaying
 

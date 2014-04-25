@@ -108,20 +108,35 @@ if (whichMarker==2){
 return findedMarker;
 }
 
-void odejm(Mat &obr,Mat tlo){
-    Mat wodj,wtlo;
-    absdiff(obr,tlo,wodj);
-    threshold(wodj,wodj,60,255,THRESH_BINARY);
-    obr=wodj;
+void odejm(Mat &obr,Mat tlo,int p, int q){
+    Mat wodj,wtlo,wobr,ob1,ob2,ob3,se;
+    Mat kanaly[3];
+    //absdiff(obr,tlo,wodj);
+    cvtColor(obr,wobr,CV_RGB2YCrCb);
+    split(wobr,kanaly);
+    threshold(kanaly[2],ob1,p,255,THRESH_BINARY);
+    threshold(kanaly[2],ob2,q,255,THRESH_BINARY_INV);
+//    bitwise_not(ob2,ob2);
+    bitwise_and(ob1,ob2,ob3);
+
+//    threshold(kanaly[2],ob1,p,255,THRESH_BINARY);
+//    threshold(kanaly[2],ob2,q,255,THRESH_BINARY_INV);
+   // bitwise_not(ob2,ob2);
+
+ //   bitwise_and(ob1,ob2,ob2);
+ //   bitwise_and(ob3,ob2,ob3);
+    erode(ob3,ob3,0,Point(-1,-1),4,1,1);
+    obr=ob3;
 }
 
 
 void ruch(Mat &obr,Mat poprz){
     Mat wobr,wodj;
-    cvtColor(obr,wobr,CV_RGB2GRAY);
-    absdiff(wobr,poprz,wodj);
+    cvtColor(obr,wobr,CV_RGB2YCrCb);
+   // absdiff(wobr,poprz,wodj);
     //threshold(wodj,wodj,60,255,THRESH_BINARY);
-    obr=wodj;
+    //obr=wodj;
+    obr=wobr;
 
 }
 

@@ -5,6 +5,12 @@
 
 int main()
 {
+//processVideo("video/v4.avi");
+//global variables
+//Mat frame; //current frame
+
+
+
     int threshold_value = 0;
     int threshold_type = 3;
     int level=200;
@@ -16,9 +22,11 @@ int main()
     int const max_BINARY_value = 255;
     char* mainWindowName = "main window";
     char* resultWindowName = "result window";
-    int matchMethod=1;
+    int matchMethod=4;
     int optionOfDisplay=0;//0 -zbinaryzowany obraz 1- splot
-    VideoCapture capture("D:/Grzesiek/C++ pliki/QuietButton/klawiatura/v4.avi"); // open the video file for reading
+        int morphSize=1;
+    VideoCapture capture("video/v4.avi"); // open the video file for reading
+
     //VideoCapture capture(0); // open the video camera no. 0
     if (!capture.isOpened()){
          cout << "Cannot open the video file" << endl;
@@ -27,7 +35,7 @@ int main()
     char* trackbar_type = "level";
     char* trackbar_value = "Value";
     char* templete = "Value";
-    Mat templateImage = imread("D:/Grzesiek/C++ pliki/QuietButton/t1.jpg", 0 );
+    Mat templateImage = imread("video/t2.bmp", 0 );
 
     bool czyOne=true;
 
@@ -35,42 +43,48 @@ int main()
     namedWindow(mainWindowName, CV_WINDOW_AUTOSIZE);
     namedWindow(resultWindowName, CV_WINDOW_AUTOSIZE);
   /// Create Trackbar
- // char* trackbar_label = "Method: \n 0: SQDIFF \n 1: SQDIFF NORMED \n 2: TM CCORR \n 3: TM CCORR NORMED \n 4: TM COEFF \n 5: TM COEFF NORMED";
- // createTrackbar( trackbar_label, resultWindowName, &matchMethod, 4, 0 );
 
    createTrackbar( trackbar_type, resultWindowName, &level, 255, 0 );
    createTrackbar( "level1", mainWindowName, &levelBin, 255, 0 );
    createTrackbar( "level2", mainWindowName, &levelBin2, 255, 0 );
-
+   createTrackbar( "typ spolotu", resultWindowName, &matchMethod, 4, 0 );
+   createTrackbar( "wielksoc elementu", mainWindowName, &morphSize, 20, 0 );
 Mat frame;
 Mat frameGray;
 Mat result;
-Mat background;
+Mat background;//=imread("video/v5.avi", 0 );
+Mat element = getStructuringElement( MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ), Point( morphSize, morphSize ) );
+
+//background.create(640,640,CV_8UC1 );
+Mat originalBackGround;
+//
+capture.read(frame);
+
+cvtColor( frame, frameGray, CV_RGB2GRAY );
+adaptiveThreshold(frameGray, frameGray,level,CV_ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY,75,10);
+levelOutImage(matchingMethod(matchMethod,optionOfDisplay,frameGray,templateImage,result),frame);
+frame.copyTo(background);
 while(capture.read(frame)){
+
     cvtColor( frame, frameGray, CV_RGB2GRAY );
-   // threshold( frameGray, frameGray, level, max_BINARY_value,4 );
     adaptiveThreshold(frameGray, frameGray,level,CV_ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY,75,10);
-
-
-    /// Load image and template
-    //frameGray.copyTo( img );
     vector<Point> *markers;
     markers=matchingMethod(matchMethod,optionOfDisplay,frameGray,templateImage,result);
+
     levelOutImage(markers,frame);
 
-    /// Image processing
-    if(czyOne)
-    {
-
-        background=frame;
-        czyOne=false;
-    }
     odejm(frame,background,levelBin,levelBin2);
+    morphSize=4;
+    element = getStructuringElement( MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ), Point( morphSize, morphSize ) );
 
-    ///Displaying
+  /// Apply the specified morphology operation
+    morphologyEx( frame, frame, 0, element );
+   // morphSize*=3;
+    //element = getStructuringElement( MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ), Point( morphSize, morphSize ) );
+   // morphologyEx( frame, frame, 1, element );
 
-    imshow(mainWindowName, frame);
-    imshow(resultWindowName, result);
+   imshow(mainWindowName, frame);
+   imshow(resultWindowName, result);
 
     if(waitKey(30) == 27){
         cout << "esc key is pressed by user" << endl;break;

@@ -54,7 +54,7 @@ float pixValue;
     }
   q++;
   rectangle( imageToDisplay, matchLoc, Point( matchLoc.x + templateImage.cols , matchLoc.y + templateImage.rows ), Scalar::all(0), 2, 8, 0 );
-    markers->push_back(Point( matchLoc.x + templateImage.cols , matchLoc.y + templateImage.rows ));
+    markers->push_back(Point( matchLoc.x + templateImage.cols/2 , matchLoc.y + templateImage.rows/2 ));
 }
 
   if (optionOfDisplay==0){
@@ -68,7 +68,9 @@ float pixValue;
   }
   return markers;
 }
-
+int findMarker(vector<Point>* markers,int whichMarker){
+return 0;
+}
 void levelOutImage(vector<Point>* markers,Mat &sourceImage){
 static float angle=0;
 
@@ -146,9 +148,6 @@ vector<Point>* rightMarkers= new vector<Point>();
     ///
 }
 
-int findMarker(vector<Point>* markers,int whichMarker){
-return 0;
-}
 void cien(Mat &obr,Mat tlo,int p){
     Mat wodj,wtlo,wobr,ob1,ob2,ob3,se;
 //    absdiff(obr,tlo,wodj);
@@ -300,10 +299,10 @@ vector<Point> * findKeyboard(Mat &frame,Mat &backgroundFrame,Mat &templateImage)
   if (markers->size()==4){frame.copyTo(backgroundFrame);return markers;}
   return 0;
 }
-Mat findBackGround(VideoCapture &capture,keyboard *klawiatura){
+Mat findBackGround(VideoCapture &capture,keyboard *klawiatura,Mat &templateImage){
 Mat backgroundFrame;
 Mat frame;
-Mat templateImage = imread("video/t4.bmp", 0 );
+
 
 while(capture.read(frame)){
     Mat result;

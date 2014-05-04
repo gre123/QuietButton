@@ -19,5 +19,5 @@ void odejm(Mat &obr,Mat &tlo,int p,int q);
 Mat shiftFrame(Mat &frame, int horizontalShift, int verticalShift);
 void processVideo(char* videoFilename);
 vector<Point> * findKeyboard(Mat &frame,Mat &backgroundFrame,Mat &templateImage);
-Mat findBackGround(VideoCapture &capture,keyboard * klawiatura);
+Mat findBackGround(VideoCapture &capture,keyboard *klawiatura,Mat &templateImage);
 #endif

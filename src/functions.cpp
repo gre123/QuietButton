@@ -147,40 +147,65 @@ vector<Point>* rightMarkers= new vector<Point>();
     }
     ///
 }
-
-void cien(Mat &obr,Mat tlo,int p){
-    Mat wodj,wtlo,wobr,ob1,ob2,ob3,se;
-//    absdiff(obr,tlo,wodj);
-//    cvtColor(wodj,wodj,CV_RGB2YCrCb);
-//
-//    threshold(wodj,wodj,140,255,THRESH_BINARY);
-//
-//    cvtColor(wodj,wodj,CV_YCrCb2RGB);
-//    cvtColor(wodj,wodj,CV_RGB2GRAY);
-//    medianBlur(wodj,wodj,5);
-//    //threshold(wodj,wodj,p,255,THRESH_BINARY);
-//    obr=wodj;
+void kontury(Mat &obr,int prog)
+{
+    Mat output;
+    Canny(obr,output,prog,2*prog,3);
+    output.copyTo(obr);
 }
 
-void odejm(Mat &obr,Mat &tlo,int p, int q){
-    Mat wodj;//,wtlo,wobr,ob1,ob2,ob3,se;
-   // Mat kanaly[3];
-
+void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2)
+{
+    Mat wodj,ob1,ob2,ob3,w_cien,wbin,w_reka,w_ycbcr,w_gray;
+    Mat kanaly[3];
 
     absdiff(tlo,obr,wodj);
+    cvtColor(wodj,w_ycbcr,CV_RGB2YCrCb);
+    split(w_ycbcr,kanaly);
+    inRange(kanaly[1],80,140,ob1);
+    inRange(kanaly[2],132,180,ob2);
+    inRange(kanaly[0],20,120,ob3);
+
+    bitwise_and(ob1,ob2,ob1);
+    bitwise_and(ob1,ob3,w_cien);
+    w_cien.copyTo(wynik);
+
+    cvtColor(wodj,w_gray,CV_RGB2GRAY);
+    threshold(w_gray,wbin,30,255,THRESH_BINARY);
+    absdiff(wbin,w_cien,w_reka);
+    erode(w_reka,w_reka,0,Point(-1,-1),5,2,1);
+    medianBlur(w_reka,w_reka,7);
+    w_reka.copyTo(wynik2);
+
+}
+void odejm(Mat &obr,Mat &tlo,int p, int q){
+    Mat wodj,ob1,ob2,ob3;//,wtlo,wobr,ob1,ob2,ob3,se;
+    Mat kanaly[3];
+
+    absdiff(tlo,obr,wodj);
+    cvtColor(wodj,wodj,CV_RGB2GRAY);
+    threshold(wodj,wodj,p,255,THRESH_BINARY);
+
+
+
+
+
+
     //cvtColor(wodj,wodj,CV_RGB2YCrCb);
    // split(wodj,kanaly);
     //threshold(wodj,wodj,150,255,THRESH_BINARY);
 
     //cvtColor(wodj,wodj,CV_YCrCb2RGB);
-    cvtColor(wodj,wodj,CV_RGB2GRAY);
-    threshold(wodj,wodj,p,255,THRESH_BINARY);
+
 
 
 //    erode(wodj,ob3,0,Point(-1,-1),5,2,1);
 //    erode(ob3,ob3,0,Point(-1,-1),5,2,1);
 //    cvtColor(obr,wobr,CV_RGB2YCrCb);
-//    split(wobr,kanaly);
+//    split(wodj,kanaly);
+//    inRange(kanaly[1],80,140,ob1);
+//    inRange(kanaly[2],132,180,ob2);
+//    inRange(kanaly[0],80,120,ob3);
 //    threshold(kanaly[2],ob1,p,255,THRESH_BINARY);
 //    threshold(kanaly[2],ob2,q,255,THRESH_BINARY_INV);
 //    bitwise_not(ob2,ob2);
@@ -191,9 +216,11 @@ void odejm(Mat &obr,Mat &tlo,int p, int q){
    // bitwise_not(ob2,ob2);
 
  //   bitwise_and(ob1,ob2,ob2);
- //   bitwise_and(ob3,ob2,ob3);
-
+//    bitwise_and(ob1,ob2,ob1);
+//    bitwise_and(ob1,ob3,wodj);
     wodj.copyTo(obr);
+
+
 }
 
 cv::Mat shiftFrame(Mat &frame, int horizontalShift, int verticalShift){

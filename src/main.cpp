@@ -15,6 +15,8 @@ int main()
     int const max_type = 4;
     int const max_BINARY_value = 255;
     char* mainWindowName = "main window";
+    char* shadow = "cieñ";
+    char* hand = "r¹sia";
     char* resultWindowName = "result window";
     char* backgroundWindowName = "background window";
     int matchMethod=4;
@@ -36,6 +38,8 @@ int main()
     namedWindow(mainWindowName, CV_WINDOW_AUTOSIZE);
     namedWindow(resultWindowName, CV_WINDOW_AUTOSIZE);
      namedWindow(backgroundWindowName, CV_WINDOW_AUTOSIZE);
+     namedWindow(hand, CV_WINDOW_AUTOSIZE);
+     namedWindow(shadow, CV_WINDOW_AUTOSIZE);
   /// Create Trackbar
 
    createTrackbar( trackbar_type, resultWindowName, &level, 255, 0 );
@@ -43,7 +47,7 @@ int main()
    createTrackbar( "level2", mainWindowName, &levelBin2, 255, 0 );
    createTrackbar( "typ spolotu", resultWindowName, &matchMethod, 4, 0 );
    createTrackbar( "wielksoc elementu", mainWindowName, &morphSize, 20, 0 );
-Mat frame;
+Mat frame,frame2;
 Mat frameGray;
 Mat result;
 Mat background;//=imread("video/v5.avi", 0 );
@@ -60,7 +64,11 @@ imshow(backgroundWindowName, background);
 
 while(capture.read(frame)){
 
-    odejm(frame,background,levelBin,levelBin2);
+    //odejm(frame,background,levelBin,levelBin2);
+    cien_palec(frame,background,frame,frame2);
+    //kontury(frame2,150);
+    //kontury(frame,150);
+
   //  morphSize=4;
     //element = getStructuringElement( MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ), Point( morphSize, morphSize ) );
 
@@ -70,8 +78,9 @@ while(capture.read(frame)){
    // element = getStructuringElement( MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ), Point( morphSize, morphSize ) );
    // morphologyEx( frame, frame, 1, element );
 
-   imshow(mainWindowName, frame);
-
+   //imshow(mainWindowName, frame);
+   imshow(hand, frame2);
+   imshow(shadow, frame);
 
     if(waitKey(30) == 27){
         cout << "esc key is pressed by user" << endl;break;
@@ -79,5 +88,7 @@ while(capture.read(frame)){
 }
     destroyWindow(mainWindowName);
     destroyWindow(resultWindowName);
+    destroyWindow(hand);
+    destroyWindow(shadow);
     return 0;
 }

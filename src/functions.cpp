@@ -1,4 +1,5 @@
 #include "functions.h"
+#define PI 3.14
 /**
  * Rotate an image
  */
@@ -150,11 +151,16 @@ vector<Point>* rightMarkers= new vector<Point>();
 void kontury(Mat &obr,int prog)
 {
     Mat output;
-    vector<vector<Point> > contours;
-    vector<Vec4i> hierarchy;
-    Canny(obr,output,prog,2*prog,3);
-    findContours( output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+    Point2f mc;
+    Moments m;
+    RNG rng(12345);
+    Scalar kol = Scalar( rng.uniform(120, 190), rng.uniform(0,100), rng.uniform(0,200) );
 
+    Canny(obr,output,prog,2*prog,3);
+   // obr.copyTo(output);
+    m=moments( output, false );
+    mc = Point2f( m.m10/m.m00 , m.m01/m.m00 );
+    circle( output, mc, 4, kol, -1, 8, 0 );
     output.copyTo(obr);
 }
 
@@ -162,6 +168,10 @@ void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2)
 {
     Mat wodj,ob1,ob2,ob3,w_cien,wbin,w_reka,w_ycbcr,w_gray;
     Mat kanaly[3];
+
+    Mat el = getStructuringElement( MORPH_RECT,
+                                       Size( 2*4 + 1, 2*4+1 ),
+                                       Point( 4, 4 ) );
 
     absdiff(tlo,obr,wodj);
     cvtColor(wodj,w_ycbcr,CV_RGB2YCrCb);
@@ -172,13 +182,13 @@ void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2)
 
     bitwise_and(ob1,ob2,ob1);
     bitwise_and(ob1,ob3,w_cien);
+    erode(w_cien,w_cien,el);
     w_cien.copyTo(wynik);
 
     cvtColor(wodj,w_gray,CV_RGB2GRAY);
     threshold(w_gray,wbin,30,255,THRESH_BINARY);
     absdiff(wbin,w_cien,w_reka);
-    erode(w_reka,w_reka,0,Point(-1,-1),5,2,1);
-    medianBlur(w_reka,w_reka,7);
+    erode(w_reka,w_reka,el);
     w_reka.copyTo(wynik2);
 }
 void odejm(Mat &obr,Mat &tlo,int p, int q){

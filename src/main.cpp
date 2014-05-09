@@ -66,8 +66,8 @@ while(capture.read(frame)){
     //odejm(frame,background,levelBin,levelBin2);
     cien_palec(frame,background,frame,frame2);
 
-    //kontury(frame2,150);
-    //kontury(frame,150);
+    kontury(frame2,150);
+    kontury(frame,150);
 
   //  morphSize=4;
     //element = getStructuringElement( MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ), Point( morphSize, morphSize ) );

@@ -1,4 +1,4 @@
-#include <iostream>
+//#include <iostream>
 #include "functions.h"
 
 //using namespace std;
@@ -61,11 +61,11 @@ klawiatura->translateKeyboardCords();
 klawiatura->drawKeyBoard(tempImg,templateImage);
 imshow(resultWindowName, tempImg);
 imshow(backgroundWindowName, background);
-
 while(capture.read(frame)){
 
     //odejm(frame,background,levelBin,levelBin2);
     cien_palec(frame,background,frame,frame2);
+
     //kontury(frame2,150);
     //kontury(frame,150);
 

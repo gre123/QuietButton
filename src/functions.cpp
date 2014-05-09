@@ -150,7 +150,11 @@ vector<Point>* rightMarkers= new vector<Point>();
 void kontury(Mat &obr,int prog)
 {
     Mat output;
+    vector<vector<Point> > contours;
+    vector<Vec4i> hierarchy;
     Canny(obr,output,prog,2*prog,3);
+    findContours( output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+
     output.copyTo(obr);
 }
 
@@ -176,7 +180,6 @@ void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2)
     erode(w_reka,w_reka,0,Point(-1,-1),5,2,1);
     medianBlur(w_reka,w_reka,7);
     w_reka.copyTo(wynik2);
-
 }
 void odejm(Mat &obr,Mat &tlo,int p, int q){
     Mat wodj,ob1,ob2,ob3;//,wtlo,wobr,ob1,ob2,ob3,se;
@@ -346,3 +349,4 @@ while(capture.read(frame)){
 }
 return backgroundFrame;
 }
+

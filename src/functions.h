@@ -1,7 +1,7 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
-#include<opencv2/opencv.hpp>//bardzo ogolna biblioteka na koncu zmienic
-#include <iostream>
+//#include<opencv2/opencv.hpp>//bardzo ogolna biblioteka na koncu zmienic
+//#include <iostream>
 #include <math.h>
 #include "enums.h"
 #include "keyboard.h"

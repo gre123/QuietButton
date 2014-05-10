@@ -10,6 +10,7 @@ int main()
     int level=200;
     int levelBin=30;
     int levelBin2=30;
+    Point2i r,p;
 
     int const max_value = 255;
     int const max_type = 4;
@@ -61,14 +62,16 @@ klawiatura->translateKeyboardCords();
 klawiatura->drawKeyBoard(tempImg,templateImage);
 imshow(resultWindowName, tempImg);
 imshow(backgroundWindowName, background);
+
 while(capture.read(frame)){
 
     //odejm(frame,background,levelBin,levelBin2);
     cien_palec(frame,background,frame,frame2);
 
-    kontury(frame2,150);
-    kontury(frame,150);
-
+    najwyzej(frame,r);
+    najwyzej(frame2,p);
+   // kontury(frame2,150);
+   // kontury(frame,150);
   //  morphSize=4;
     //element = getStructuringElement( MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ), Point( morphSize, morphSize ) );
 

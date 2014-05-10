@@ -148,21 +148,27 @@ vector<Point>* rightMarkers= new vector<Point>();
     }
     ///
 }
-void kontury(Mat &obr,int prog)
-{
-    Mat output;
-    Point2f mc;
-    Moments m;
-    RNG rng(12345);
-    Scalar kol = Scalar( rng.uniform(120, 190), rng.uniform(0,100), rng.uniform(0,200) );
 
-    Canny(obr,output,prog,2*prog,3);
-   // obr.copyTo(output);
-    m=moments( output, false );
-    mc = Point2f( m.m10/m.m00 , m.m01/m.m00 );
-    circle( output, mc, 4, kol, -1, 8, 0 );
-    output.copyTo(obr);
+
+void najwyzej(Mat &obr,Point2i &pkt)
+{
+    Mat pom;
+    RNG rng(12345);
+    for(int j=0;j<obr.rows;j++)
+    {
+        for(int i=0;i<obr.cols;i++)
+        {
+            if((int)obr.at<uchar>(j,i)==255)
+            {
+             //   cout<<j<<" "<<i<<" "<<" "<<(int)obr.at<uchar>(j,i)<<endl;
+                circle(obr,Point2i(i,j),4,Scalar( rng.uniform(120, 255), rng.uniform(0,255), rng.uniform(0,255) ),-1,8,0);
+                pkt = Point2i(i,j);
+                return;
+            }
+        }
+    }
 }
+
 
 void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2)
 {
@@ -170,8 +176,10 @@ void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2)
     Mat kanaly[3];
 
     Mat el = getStructuringElement( MORPH_RECT,
-                                       Size( 2*4 + 1, 2*4+1 ),
-                                       Point( 4, 4 ) );
+                                       Size( 2*3 + 1, 2*3+1 ),
+                                       Point( 3,3 ) );
+
+
 
     absdiff(tlo,obr,wodj);
     cvtColor(wodj,w_ycbcr,CV_RGB2YCrCb);
@@ -182,15 +190,17 @@ void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2)
 
     bitwise_and(ob1,ob2,ob1);
     bitwise_and(ob1,ob3,w_cien);
-    erode(w_cien,w_cien,el);
+
     w_cien.copyTo(wynik);
 
     cvtColor(wodj,w_gray,CV_RGB2GRAY);
     threshold(w_gray,wbin,30,255,THRESH_BINARY);
     absdiff(wbin,w_cien,w_reka);
+
     erode(w_reka,w_reka,el);
     w_reka.copyTo(wynik2);
 }
+
 void odejm(Mat &obr,Mat &tlo,int p, int q){
     Mat wodj,ob1,ob2,ob3;//,wtlo,wobr,ob1,ob2,ob3,se;
     Mat kanaly[3];

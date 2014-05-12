@@ -9,6 +9,8 @@ struct key{
 char character;
 int x,y;
 int width,height;
+///
+Point2i vertex[4];
 };
 class keyboard{
 public:
@@ -22,5 +24,7 @@ char getKey(int x, int y);
 void setKeyboard(std::vector<cv::Point> * _markers);
 void drawKeyBoard(cv::Mat &image,Mat &templateImage);
 void translateKeyboardCords();
+char getKlawisz(Point2i palecPoint, Point2i cienPoint);
+void setCameraCord(int &x,int &y);
 };
 #endif

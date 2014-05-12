@@ -2,7 +2,7 @@
 #include "functions.h"
 
 //using namespace std;
-
+/*
 int main()
 {
 
@@ -91,10 +91,11 @@ while(capture.read(frame)){
   //void rectangle(Mat& img, Rect rec, const Scalar& color, int thickness=1, int lineType=8, int shift=0 )
   rectangle(frame, boundingrect, Scalar(255,0,0),1,8,0);
 
-    najwyzej(result,r);
-    najwyzej(cien,p);
-    circle( tym[2], r, 3, Scalar(255), -1, 8, 0 );
-    circle( tym[2], p, 3, Scalar(255), -1, 8, 0 );
+
+     Point2i *r=najwyzej(result);
+   Point2i *p=najwyzej(cien);
+    circle( tym[2], *r, 3, Scalar(255), -1, 8, 0 );
+    circle( tym[2], *p, 3, Scalar(255), -1, 8, 0 );
 
     tym[0]=result;
     tym[1]=cien;
@@ -116,3 +117,4 @@ while(capture.read(frame)){
     destroyAllWindows();
     return 0;
 }
+*/

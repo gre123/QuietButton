@@ -1,5 +1,11 @@
 #include "functions.h"
 #define PI 3.14
+extern int a;
+extern int b;
+extern int c;
+extern int d;
+extern int e;
+extern int f;
 /**
  * Rotate an image
  */
@@ -21,17 +27,8 @@ vector<Point>* matchingMethod(int match_method,int optionOfDisplay,Mat &sourceIm
   Mat imageToDisplay;
   sourceImage.copyTo( imageToDisplay );
 
-  /// Create the resultImage matrix
- // int resultImage_cols =  sourceImage.cols;- templateImage.cols + 1;
-//  int resultImage_rows = sourceImage.rows - templateImage.rows + 1;
-
- // resultImage.create(resultImage_cols,resultImage_rows,CV_8UC1 );
-
   /// Do the Matching and Normalize
   matchTemplate(sourceImage,templateImage,resultImage,match_method);
- // cv::threshold(resultImage, resultImage, 0.1, 1., 2);
- // normalize(resultImage,resultImage,0,1,NORM_MINMAX,-1,Mat() );
-//for(int q=0;q<4;q++){
 int q=0;
  while(q<4){
   /// Localizing the best match with minMaxLoc
@@ -55,7 +52,7 @@ float pixValue;
     }
   q++;
   rectangle( imageToDisplay, matchLoc, Point( matchLoc.x + templateImage.cols , matchLoc.y + templateImage.rows ), Scalar::all(0), 2, 8, 0 );
-    markers->push_back(Point( matchLoc.x + templateImage.cols/2 , matchLoc.y + templateImage.rows/2 ));
+  markers->push_back(Point( matchLoc.x + templateImage.cols/2 , matchLoc.y + templateImage.rows/2 ));
 }
 
   if (optionOfDisplay==0){
@@ -96,53 +93,6 @@ rotate(sourceImage,angle , sourceImage);
 sourceImage=shiftFrame(sourceImage, shiftHorizontal,shiftVertical );
 }
 
-}
-
-///kopia sortMarkers, bo chcialem zrozumiec ta funkcje
-void sortCircles(vector<Vec3f>* markers){
-vector<Vec3f>* leftMarkers= new vector<Vec3f>();
-vector<Vec3f>* rightMarkers= new vector<Vec3f>();
-    int findedMarker=0; int cordx=9999;
-    ///
-    for(int i=0;i<markers->size();i++){
-        if (markers->at(i)[0]<cordx){cordx=markers->at(i)[0];findedMarker=i;}
-    }
-
-    leftMarkers->push_back(markers->at(findedMarker));
-    markers->erase(markers->begin()+findedMarker);
-
-    cordx=9999;findedMarker=0;
-    for(int i=0;i<markers->size();i++){
-        if (markers->at(i)[0]<cordx){cordx=markers->at(i)[0];findedMarker=i;}
-    }
-    leftMarkers->push_back(markers->at(findedMarker));
-    markers->erase(markers->begin()+findedMarker);
-    ///
-    rightMarkers->push_back(markers->at(0));
-    rightMarkers->push_back(markers->at(1));
-    markers->clear();
-    ///
-    int cordy=9999;
-    findedMarker=0;
-    for(int i=0;i<leftMarkers->size();i++){
-        if (leftMarkers->at(i)[1]<cordy){cordy=leftMarkers->at(i)[1];findedMarker=i;}
-    }markers->push_back(leftMarkers->at(findedMarker));
-    leftMarkers->erase(leftMarkers->begin()+findedMarker);
-    ///
-    cordy=9999;
-    findedMarker=0;
-    for(int i=0;i<rightMarkers->size();i++){
-        if (rightMarkers->at(i)[1]<cordy){cordy=rightMarkers->at(i)[1];findedMarker=i;}
-    }markers->push_back(rightMarkers->at(findedMarker));
-    rightMarkers->erase(rightMarkers->begin()+findedMarker);
-    ///
-    markers->push_back(leftMarkers->at(0));
-    markers->push_back(rightMarkers->at(0));
-    ///
-    cout << "powinny by poukladane : lg, pg, ld, pd"<<endl;
-    for(int i=0;i<markers->size();i++){
-       cout<< markers->at(i)[0]<<" - "<<markers->at(i)[1]<<endl;
-    }
 }
 
 void sortMarkers(vector<Point>* markers){
@@ -195,10 +145,53 @@ vector<Point>* rightMarkers= new vector<Point>();
     }
     ///
 }
+///kopia sortMarkers, bo chcialem zrozumiec ta funkcje
+void sortCircles(vector<Vec3f>* markers){
+vector<Vec3f>* leftMarkers= new vector<Vec3f>();
+vector<Vec3f>* rightMarkers= new vector<Vec3f>();
+    int findedMarker=0; int cordx=9999;
+    ///
+    for(int i=0;i<markers->size();i++){
+        if (markers->at(i)[0]<cordx){cordx=markers->at(i)[0];findedMarker=i;}
+    }
 
+    leftMarkers->push_back(markers->at(findedMarker));
+    markers->erase(markers->begin()+findedMarker);
 
-void najwyzej(Mat &obr,Point2i &pkt)
-{
+    cordx=9999;findedMarker=0;
+    for(int i=0;i<markers->size();i++){
+        if (markers->at(i)[0]<cordx){cordx=markers->at(i)[0];findedMarker=i;}
+    }
+    leftMarkers->push_back(markers->at(findedMarker));
+    markers->erase(markers->begin()+findedMarker);
+    ///
+    rightMarkers->push_back(markers->at(0));
+    rightMarkers->push_back(markers->at(1));
+    markers->clear();
+    ///
+    int cordy=9999;
+    findedMarker=0;
+    for(int i=0;i<leftMarkers->size();i++){
+        if (leftMarkers->at(i)[1]<cordy){cordy=leftMarkers->at(i)[1];findedMarker=i;}
+    }markers->push_back(leftMarkers->at(findedMarker));
+    leftMarkers->erase(leftMarkers->begin()+findedMarker);
+    ///
+    cordy=9999;
+    findedMarker=0;
+    for(int i=0;i<rightMarkers->size();i++){
+        if (rightMarkers->at(i)[1]<cordy){cordy=rightMarkers->at(i)[1];findedMarker=i;}
+    }markers->push_back(rightMarkers->at(findedMarker));
+    rightMarkers->erase(rightMarkers->begin()+findedMarker);
+    ///
+    markers->push_back(leftMarkers->at(0));
+    markers->push_back(rightMarkers->at(0));
+    ///
+    cout << "powinny by poukladane : lg, pg, ld, pd"<<endl;
+    for(int i=0;i<markers->size();i++){
+       cout<< markers->at(i)[0]<<" - "<<markers->at(i)[1]<<endl;
+    }
+}
+Point2i *najwyzej(Mat &obr){
     Mat pom;
     RNG rng(12345);
     for(int j=0;j<obr.rows;j++)
@@ -209,88 +202,65 @@ void najwyzej(Mat &obr,Point2i &pkt)
             {
              //   cout<<j<<" "<<i<<" "<<" "<<(int)obr.at<uchar>(j,i)<<endl;
                 circle(obr,Point2i(i,j),4,Scalar( rng.uniform(120, 255), rng.uniform(0,255), rng.uniform(0,255) ),-1,8,0);
-                pkt = Point2i(i,j);
-                return;
+                return  new Point2i(i,j);
             }
         }
     }
+    return 0;
 }
-
-
-void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2)
-{
+void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2){
     Mat wodj,ob1,ob2,ob3,w_cien,wbin,w_reka,w_ycbcr,w_gray;
     Mat kanaly[3];
-
-    Mat el = getStructuringElement( MORPH_RECT,
-                                       Size( 2*3 + 1, 2*3+1 ),
-                                       Point( 3,3 ) );
-
-
+    Mat dlon,cien;
+    int morphSize=1;
+    Mat element = getStructuringElement(  MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ),Point( morphSize,morphSize ) );
 
     absdiff(tlo,obr,wodj);
-    cvtColor(wodj,w_ycbcr,CV_RGB2YCrCb);
-    split(w_ycbcr,kanaly);
-    inRange(kanaly[1],80,140,ob1);
-    inRange(kanaly[2],132,180,ob2);
-    inRange(kanaly[0],20,120,ob3);
-
-    bitwise_and(ob1,ob2,ob1);
-    bitwise_and(ob1,ob3,w_cien);
-
-    w_cien.copyTo(wynik);
-
     cvtColor(wodj,w_gray,CV_RGB2GRAY);
     threshold(w_gray,wbin,30,255,THRESH_BINARY);
-    absdiff(wbin,w_cien,w_reka);
 
-    erode(w_reka,w_reka,el);
-    w_reka.copyTo(wynik2);
+    erode(wbin,wbin,element);
+    //morphSize=5;
+    //element = getStructuringElement(  MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ),Point( morphSize,morphSize ) );
+    //dilate(wbin,wbin,element);
+
+    cvtColor(obr,w_ycbcr,CV_RGB2YCrCb);
+    split(w_ycbcr,kanaly);
+    inRange(kanaly[0],a,b,ob1);
+   // inRange(kanaly[1],c,d,ob2);
+    inRange(kanaly[2],e,f,ob3);
+
+
+//imshow("test1", ob2);
+//imshow("test2", ob3);
+//bitwise_or(ob3,ob2,dlon);
+    //bitwise_and(dlon,wbin,dlon);
+    //dilate(dlon,dlon,element);
+    ob3.copyTo(dlon);
+    dlon.copyTo(wynik);
+//imshow("test", dlon);
+    //cvtColor(wodj,w_gray,CV_RGB2GRAY);
+    //threshold(w_gray,wbin,30,255,THRESH_BINARY);
+   // bitwise_not(ob1,ob1);
+    //imshow("test", ob1);
+   // imshow("test2", wbin);
+    absdiff(ob1,wbin,cien);
+    bitwise_not(ob3,ob3);
+    bitwise_and(ob3,wbin,dlon);
+    morphSize=3;
+    element = getStructuringElement(  MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ),Point( morphSize,morphSize ) );
+
+    erode(dlon,dlon,element);
+   // bitwise_and(wbin,wbin,dlon);
+    dlon.copyTo(wynik2);
 }
 
 void odejm(Mat &obr,Mat &tlo,int p, int q){
-    Mat wodj,ob1,ob2,ob3;//,wtlo,wobr,ob1,ob2,ob3,se;
-    Mat kanaly[3];
-
+    Mat wodj;
     absdiff(tlo,obr,wodj);
     cvtColor(wodj,wodj,CV_RGB2GRAY);
     threshold(wodj,wodj,p,255,THRESH_BINARY);
-
-
-
-
-
-
-    //cvtColor(wodj,wodj,CV_RGB2YCrCb);
-   // split(wodj,kanaly);
-    //threshold(wodj,wodj,150,255,THRESH_BINARY);
-
-    //cvtColor(wodj,wodj,CV_YCrCb2RGB);
-
-
-
-//    erode(wodj,ob3,0,Point(-1,-1),5,2,1);
-//    erode(ob3,ob3,0,Point(-1,-1),5,2,1);
-//    cvtColor(obr,wobr,CV_RGB2YCrCb);
-//    split(wodj,kanaly);
-//    inRange(kanaly[1],80,140,ob1);
-//    inRange(kanaly[2],132,180,ob2);
-//    inRange(kanaly[0],80,120,ob3);
-//    threshold(kanaly[2],ob1,p,255,THRESH_BINARY);
-//    threshold(kanaly[2],ob2,q,255,THRESH_BINARY_INV);
-//    bitwise_not(ob2,ob2);
-   // bitwise_and(ob1,ob2,ob3);
-
-//    threshold(kanaly[2],ob1,p,255,THRESH_BINARY);
-//    threshold(kanaly[2],ob2,q,255,THRESH_BINARY_INV);
-   // bitwise_not(ob2,ob2);
-
- //   bitwise_and(ob1,ob2,ob2);
-//    bitwise_and(ob1,ob2,ob1);
-//    bitwise_and(ob1,ob3,wodj);
     wodj.copyTo(obr);
-
-
 }
 
 cv::Mat shiftFrame(Mat &frame, int horizontalShift, int verticalShift){
@@ -404,7 +374,6 @@ Mat frame;
 while(capture.read(frame)){
     Mat result;
     vector<Point> *markers;
-   // keyboard * klawiatura;
 
     markers=findKeyboard(frame,backgroundFrame,templateImage);
     if (markers!=0 && markers->size()==4){
@@ -417,7 +386,8 @@ while(capture.read(frame)){
 return backgroundFrame;
 }
 
-///ma znale≈∫c tlo i 4 kolka
+
+///ma znaleüc tlo i 4 kolka
 vector<Vec3f> tloznaczniki(VideoCapture &capture,Mat *tlo){
 	Mat channel[3];
 	Mat frame;
@@ -444,4 +414,3 @@ vector<Point> vec3fToPoint(vector<Vec3f> vec){
     }
     return wynik;
 }
-

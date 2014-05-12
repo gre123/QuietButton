@@ -2,14 +2,20 @@
 #include "functions.h"
 
 //using namespace std;
-/*
+int a=115;
+int b=255;
+int c=100;
+int d=120;
+int e=146;
+int f=220;
+
 int main()
 {
 
     char* mainWindowName = "Main window";
     char* resultWindowName = "Result window";
 
-    VideoCapture capture("video/vv11.wmv"); // open the video file for reading
+    VideoCapture capture("video/vv1.wmv"); // open the video file for reading
     if (!capture.isOpened()){
          cout << "Cannot open the video file" << endl;
          return -1;
@@ -92,10 +98,11 @@ while(capture.read(frame)){
   rectangle(frame, boundingrect, Scalar(255,0,0),1,8,0);
 
 
-     Point2i *r=najwyzej(result);
+   Point2i *r=najwyzej(result);
    Point2i *p=najwyzej(cien);
-    circle( tym[2], *r, 3, Scalar(255), -1, 8, 0 );
-    circle( tym[2], *p, 3, Scalar(255), -1, 8, 0 );
+    ///Nie wiem, czemu te 2 linijki wywalaja program
+    //circle( tym[2], *r, 3, Scalar(255), -1, 8, 0 );
+    //circle( tym[2], *p, 3, Scalar(255), -1, 8, 0 );
 
     tym[0]=result;
     tym[1]=cien;
@@ -117,4 +124,4 @@ while(capture.read(frame)){
     destroyAllWindows();
     return 0;
 }
-*/
+

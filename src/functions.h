@@ -14,6 +14,7 @@ vector<Point>* matchingMethod(int match_method, int optionOfDisplay,Mat &sourceI
 void levelOutImage(vector<Point>* markers,Mat &sourceImage);
 int findMarker(vector<Point>* markers,int whichMarker);
 void sortMarkers(vector<Point>* markers);
+void sortCircles(vector<Vec3f>* markers);
 void najwyzej(Mat &obr,Point2i &pkt);
 void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2);
 void odejm(Mat &obr,Mat &tlo,int p,int q);
@@ -21,4 +22,6 @@ Mat shiftFrame(Mat &frame, int horizontalShift, int verticalShift);
 void processVideo(char* videoFilename);
 vector<Point> * findKeyboard(Mat &frame,Mat &backgroundFrame,Mat &templateImage);
 Mat findBackGround(VideoCapture &capture,keyboard *klawiatura,Mat &templateImage);
+vector<Vec3f> tloznaczniki(VideoCapture &capture,Mat *tlo);
+vector<Point> vec3fToPoint(vector<Vec3f> vec);
 #endif

@@ -98,6 +98,53 @@ sourceImage=shiftFrame(sourceImage, shiftHorizontal,shiftVertical );
 
 }
 
+///kopia sortMarkers, bo chcialem zrozumiec ta funkcje
+void sortCircles(vector<Vec3f>* markers){
+vector<Vec3f>* leftMarkers= new vector<Vec3f>();
+vector<Vec3f>* rightMarkers= new vector<Vec3f>();
+    int findedMarker=0; int cordx=9999;
+    ///
+    for(int i=0;i<markers->size();i++){
+        if (markers->at(i)[0]<cordx){cordx=markers->at(i)[0];findedMarker=i;}
+    }
+
+    leftMarkers->push_back(markers->at(findedMarker));
+    markers->erase(markers->begin()+findedMarker);
+
+    cordx=9999;findedMarker=0;
+    for(int i=0;i<markers->size();i++){
+        if (markers->at(i)[0]<cordx){cordx=markers->at(i)[0];findedMarker=i;}
+    }
+    leftMarkers->push_back(markers->at(findedMarker));
+    markers->erase(markers->begin()+findedMarker);
+    ///
+    rightMarkers->push_back(markers->at(0));
+    rightMarkers->push_back(markers->at(1));
+    markers->clear();
+    ///
+    int cordy=9999;
+    findedMarker=0;
+    for(int i=0;i<leftMarkers->size();i++){
+        if (leftMarkers->at(i)[1]<cordy){cordy=leftMarkers->at(i)[1];findedMarker=i;}
+    }markers->push_back(leftMarkers->at(findedMarker));
+    leftMarkers->erase(leftMarkers->begin()+findedMarker);
+    ///
+    cordy=9999;
+    findedMarker=0;
+    for(int i=0;i<rightMarkers->size();i++){
+        if (rightMarkers->at(i)[1]<cordy){cordy=rightMarkers->at(i)[1];findedMarker=i;}
+    }markers->push_back(rightMarkers->at(findedMarker));
+    rightMarkers->erase(rightMarkers->begin()+findedMarker);
+    ///
+    markers->push_back(leftMarkers->at(0));
+    markers->push_back(rightMarkers->at(0));
+    ///
+    cout << "powinny by poukladane : lg, pg, ld, pd"<<endl;
+    for(int i=0;i<markers->size();i++){
+       cout<< markers->at(i)[0]<<" - "<<markers->at(i)[1]<<endl;
+    }
+}
+
 void sortMarkers(vector<Point>* markers){
 vector<Point>* leftMarkers= new vector<Point>();
 vector<Point>* rightMarkers= new vector<Point>();
@@ -368,5 +415,33 @@ while(capture.read(frame)){
     }
 }
 return backgroundFrame;
+}
+
+///ma znaleźc tlo i 4 kolka
+vector<Vec3f> tloznaczniki(VideoCapture &capture,Mat *tlo){
+	Mat channel[3];
+	Mat frame;
+	vector<Vec3f> circles;
+
+	while(capture.read(frame)){
+		split(frame, channel);
+		HoughCircles( channel[0], circles, CV_HOUGH_GRADIENT, 1, channel[0].rows/5, 200, 30, 0, 0 );
+		if (circles.size()==4){
+			sortCircles(&circles);
+			break;
+		}
+	}
+	*tlo=frame;
+	return circles;
+}
+
+///(x,y,promien) -> (x,y)
+vector<Point> vec3fToPoint(vector<Vec3f> vec){
+    int vector_size = vec.size();
+    vector<Point> wynik;
+    for( int i=0; i<vector_size; i++ ){
+        wynik.push_back(Point(vec[i][0], vec[i][1]));
+    }
+    return wynik;
 }
 

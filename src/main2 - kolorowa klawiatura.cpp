@@ -48,9 +48,14 @@ int main()
     createTrackbar( "Próg2", mainWindowName, &u2, 255, 0 );
     //createTrackbar( "Próg binaryzacji", "cien", &levelBin, 255, 0 );
  Mat tlo, frame, maska;
+ ///ustawienie prostokata do wyzerowania
  vector<Vec3f> circles = tloznaczniki(capture, &tlo);
- vector<Point> srodki = vec3fToPoint(circles);
- Rect boundingrect = boundingRect(srodki);
+ vector<Point> brzegi = vec3fToPoint(circles);
+ brzegi[0].x=brzegi[0].x-circles[0][2]+5; //lg
+ brzegi[1].x=brzegi[1].x+circles[1][2]-5; //pg
+ brzegi[2].x=brzegi[2].x-circles[2][2]+5; //ld
+ brzegi[3].x=brzegi[3].x+circles[3][2]-5; //pd
+ Rect boundingrect = boundingRect(brzegi);
  capture.read(frame);   //tej liniki nie powinno tu byc, ale odczytanie rozmiaru obrazu z samego capture rzucalo bledem
      maska = cv::Mat::zeros(frame.size(),CV_8UC1);
      maska(boundingrect) = 255;
@@ -62,7 +67,7 @@ Mat cien;
 Mat polaczone;
 Mat tym[3];
 tym[2]=cv::Mat::zeros(frame.size(),CV_8UC1);
-Point2i r,p;
+Point2i *r,*p;
 //vector<Vec3f> circles;
 
 while(capture.read(frame)){
@@ -98,11 +103,12 @@ while(capture.read(frame)){
   rectangle(frame, boundingrect, Scalar(255,0,0),1,8,0);
 
 
-   Point2i *r=najwyzej(result);
-   Point2i *p=najwyzej(cien);
-    ///Nie wiem, czemu te 2 linijki wywalaja program
+   r=najwyzej(result);
+   p=najwyzej(cien);
     //circle( tym[2], *r, 3, Scalar(255), -1, 8, 0 );
     //circle( tym[2], *p, 3, Scalar(255), -1, 8, 0 );
+   line(tym[2], *r, *p, cv::Scalar(255), 3,8,0);
+
 
     tym[0]=result;
     tym[1]=cien;

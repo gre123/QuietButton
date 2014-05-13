@@ -206,7 +206,7 @@ Point2i *najwyzej(Mat &obr){
             }
         }
     }
-    return 0;
+    return new Point2i(0,0);
 }
 void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2){
     Mat wodj,ob1,ob2,ob3,w_cien,wbin,w_reka,w_ycbcr,w_gray;

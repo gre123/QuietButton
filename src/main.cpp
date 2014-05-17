@@ -1,6 +1,9 @@
 ////#include <iostream>
 //#include "functions.h"
 //
+//#define WINVER 0x0500   //
+//#include <windows.h>    //do klawiatury
+//
 ////using namespace std;
 //int a=115;
 //int b=255;
@@ -9,8 +12,16 @@
 //int e=146;
 //int f=220;
 //
+//
 //int main()
 //{
+//    INPUT ip;                   //
+//    ip.type = INPUT_KEYBOARD;   //
+//    ip.ki.wScan = 0;            //do symulowania klawiatury
+//    ip.ki.time = 0;             //
+//    ip.ki.dwExtraInfo = 0;      //
+//    ip.ki.dwFlags = 0; // 0 for key press
+//
 //    int threshold_value = 0;
 //    int threshold_type = 3;
 //    int level=200;
@@ -83,7 +94,6 @@
 //
 // //   odejm(frame,background,levelBin,levelBin2);
 //   cien_palec(frame,background,dlon,cien);
-//
 //   Point2i *r=najwyzej(dlon);
 //   Point2i *p=najwyzej(cien);
 //
@@ -93,6 +103,8 @@
 //   cv::line(frame, *r, *p, cv::Scalar(255,0,0), 2, CV_AA);
 //   char znak=klawiatura->getKlawisz(*r,*p);
 //   if (znak!=0){
+//        ip.ki.wVk = VkKeyScan(znak);        //wysyla przerwanie klawiatury
+//        SendInput(1, &ip, sizeof(INPUT));   //nie dziala przytrzymanie klawisza
 //    cout<<znak<<endl;
 //   }
 //

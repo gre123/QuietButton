@@ -24,4 +24,5 @@ vector<Point> * findKeyboard(Mat &frame,Mat &backgroundFrame,Mat &templateImage)
 Mat findBackGround(VideoCapture &capture,keyboard *klawiatura,Mat &templateImage);
 vector<Vec3f> tloznaczniki(VideoCapture &capture,Mat *tlo);
 vector<Point> vec3fToPoint(vector<Vec3f> vec);
+void myszkaCallback(int event, int x, int y, int flags, void* kolka);
 #endif

@@ -414,3 +414,14 @@ vector<Point> vec3fToPoint(vector<Vec3f> vec){
     }
     return wynik;
 }
+
+void myszkaCallback(int event, int x, int y, int flags, void* kolka){
+    if  ( event == EVENT_LBUTTONDOWN ){
+        vector<Vec3f> *circles;
+        circles = (vector<Vec3f>*) kolka;
+        cout<< "Bede dodawal kolko o wspolrzednych: " << x << " ; " << y <<endl;
+        //Vec3f *tym = new Vec3f((float) x, (float) y, 10);
+        (*circles).push_back( Vec3f((float) x, (float) y, 10));
+    }
+
+}

@@ -51,10 +51,10 @@ int main()
  ///ustawienie prostokata do wyzerowania
  vector<Vec3f> circles = tloznaczniki(capture, &tlo);
  vector<Point> brzegi = vec3fToPoint(circles);
- brzegi[0].x=brzegi[0].x-circles[0][2]+5; //lg
- brzegi[1].x=brzegi[1].x+circles[1][2]-5; //pg
- brzegi[2].x=brzegi[2].x-circles[2][2]+5; //ld
- brzegi[3].x=brzegi[3].x+circles[3][2]-5; //pd
+ brzegi[0].x=brzegi[0].x-0.8*circles[0][2]; //lg
+ brzegi[1].x=brzegi[1].x+0.8*circles[1][2]; //pg
+ brzegi[2].x=brzegi[2].x-0.8*circles[2][2]; //ld
+ brzegi[3].x=brzegi[3].x+0.8*circles[3][2]; //pd
  Rect boundingrect = boundingRect(brzegi);
  capture.read(frame);   //tej liniki nie powinno tu byc, ale odczytanie rozmiaru obrazu z samego capture rzucalo bledem
      maska = cv::Mat::zeros(frame.size(),CV_8UC1);

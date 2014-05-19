@@ -425,3 +425,134 @@ void myszkaCallback(int event, int x, int y, int flags, void* kolka){
     }
 
 }
+
+char kolKlikniecie(Point2i *r, Point2i *c, Point *lg, Point *pg, Point *ld){
+    int distance=(r->x-c->x)*(r->x-c->x)+(r->y-c->y)*(r->y-c->y);
+    if (distance<1200){ //czyli, ze jest klikniecie
+        float klpoz, klpion;
+        klpion = (ld->y - lg->y)/5;
+        klpoz = (pg->x - lg->x)/11;
+        Point kwz = Point(r->x - lg->x + klpoz/2, r->y - lg->y + klpion/2); //kwz - pozycja klawisza wzgledem srodka lewego gornego kolka
+        switch( (int) (kwz.y/klpion) ){ //najpierw po wierszach
+        case 0:
+            //poza klawiatura (za wysoko)
+            return '+';
+        case 1:
+            switch( (int) (kwz.x/klpoz) ){
+            case 0:
+                return '<';//za bardzo na lewo
+            case 1:
+                return 'q';
+            case 2:
+                return 'w';
+            case 3:
+                return 'e';
+            case 4:
+                return 'r';
+            case 5:
+                return 't';
+            case 6:
+                return 'y';
+            case 7:
+                return 'u';
+            case 8:
+                return 'i';
+            case 9:
+                return 'o';
+            case 10:
+                return 'p';
+            default:
+                return '>'; //za bardzo na prawo
+            }
+        break;
+        case 2:
+            switch( (int) (kwz.x/klpoz) ){
+            case 0:
+                return '<';//za bardzo na lewo
+            case 1:
+                return 'a';
+            case 2:
+                return 's';
+            case 3:
+                return 'd';
+            case 4:
+                return 'f';
+            case 5:
+                return 'g';
+            case 6:
+                return 'h';
+            case 7:
+                return 'j';
+            case 8:
+                return 'k';
+            case 9:
+                return 'l';
+            case 10:
+                return ':';
+            default:
+                return '>'; //za bardzo na prawo
+            }
+        break;
+        case 3:
+            switch( (int) (kwz.x/klpoz) ){
+            case 0:
+                return '<';//za bardzo na lewo
+            case 1:
+                return 'z';
+            case 2:
+                return 'x';
+            case 3:
+                return 'c';
+            case 4:
+                return 'v';
+            case 5:
+                return 'b';
+            case 6:
+                return 'n';
+            case 7:
+                return 'm';
+            case 8:
+                return '?';
+            case 9:
+                return 13;  //13 = ENTER
+            case 10:
+                return 13;
+            default:
+                return '>'; //za bardzo na prawo
+            }
+        break;
+        case 4:
+            switch( (int) (kwz.x/klpoz) ){
+            case 0:
+                return '<';//za bardzo na lewo
+            case 1:
+                return '^';
+            case 2:
+                return 32;
+            case 3:
+                return 32;
+            case 4:
+                return 32;
+            case 5:
+                return 32;
+            case 6:
+                return 32;
+            case 7:
+                return 32;
+            case 8:
+                return 32;
+            case 9:
+                return 13;
+            case 10:
+                return 13;
+            default:
+                return '>'; //za bardzo na prawo
+            }
+        break;
+        default:
+            //poza klawiatura (za nisko)
+            return '-';
+        }
+    }
+return 0;
+}

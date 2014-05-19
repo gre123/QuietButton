@@ -10,7 +10,18 @@
 //int f=220;
 //char key;
 //
+//#define WINVER 0x0500   //
+//#include <windows.h>    //do klawiatury
+//
+//
 //int main(){
+//    INPUT ip;                   //
+//    ip.type = INPUT_KEYBOARD;   //
+//    ip.ki.wScan = 0;            //do symulowania klawiatury
+//    ip.ki.time = 0;             //
+//    ip.ki.dwExtraInfo = 0;      //
+//    ip.ki.dwFlags = 0; // 0 for key press
+//
 //    char nazwaokna[] = "Podglad kamery - ustawianie tla";
 //    cvNamedWindow(nazwaokna, CV_WINDOW_AUTOSIZE); //Create window
 //    VideoCapture capture(0); // open the video file for reading
@@ -146,6 +157,7 @@
 //    Mat polaczone;
 //    Mat tym[3];
 //        tym[2]=cv::Mat::zeros(tlo.size(),CV_8UC1);
+//    char znak;
 ////cout << "echodze do while'a 4" << endl;
 //    while(capture.read(frame)){
 //        split(frame, channel);
@@ -165,7 +177,13 @@
 //        tym[1]=cien;
 //        merge(tym,3,polaczone);
 //            std::ostringstream str;
-//            str << "Pozycja palca: (" << (*r).x << "," << (*r).y << ")";
+//            //str << "Pozycja palca: (" << (*r).x << "," << (*r).y << ")";
+//            znak = kolKlikniecie(r,p,&(brzegi[0]), &(brzegi[1]), &(brzegi[2]));
+//            str << "kolKlikniecie zwrocil: " << znak;
+//            if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
+//                ip.ki.wVk = VkKeyScan(znak);        //wysyla przerwanie klawiatury
+//                SendInput(1, &ip, sizeof(INPUT));   //nie dziala przytrzymanie klawisza
+//            }
 //            putText(polaczone, str.str(), cvPoint(30,30),
 //            FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
 //        imshow(nazwaokna4, polaczone);

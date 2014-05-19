@@ -114,6 +114,11 @@ while(capture.read(frame)){
     tym[1]=cien;
     //tym[2]=cv::Mat::zeros(frame.size(),CV_8UC1);
     merge(tym,3,polaczone);
+            std::ostringstream str;
+            //str << "Pozycja palca: (" << (*r).x << "," << (*r).y << ")";
+            str << "kolKlikniecie zwrocil: " << kolKlikniecie(r,p,&(brzegi[0]), &(brzegi[1]), &(brzegi[2]));
+            putText(polaczone, str.str(), cvPoint(30,30),
+            FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
     // Display
     imshow(mainWindowName, frame);
 //    imshow("Blue", channel[0]);

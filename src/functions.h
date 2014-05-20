@@ -9,6 +9,10 @@ using namespace std;
 using namespace cv;
 
 
+
+
+static int dist;
+
 void rotate(Mat& src, double angle, Mat& dst);
 vector<Point>* matchingMethod(int match_method, int optionOfDisplay,Mat &sourceImage,Mat &templateImage,Mat &outImage);
 void levelOutImage(vector<Point>* markers,Mat &sourceImage);
@@ -25,5 +29,7 @@ Mat findBackGround(VideoCapture &capture,keyboard *klawiatura,Mat &templateImage
 vector<Vec3f> tloznaczniki(VideoCapture &capture,Mat *tlo);
 vector<Point> vec3fToPoint(vector<Vec3f> vec);
 void myszkaCallback(int event, int x, int y, int flags, void* kolka);
-char kolKlikniecie(Point2i *r, Point2i *c, Point *lg, Point *pg, Point *ld);
+char kolKlikniecie(Point2i *r, Point2i *c, Point *lg, Point *pg, Point *ld,int distance_req);
+
+
 #endif

@@ -426,9 +426,9 @@ void myszkaCallback(int event, int x, int y, int flags, void* kolka){
 
 }
 
-char kolKlikniecie(Point2i *r, Point2i *c, Point *lg, Point *pg, Point *ld){
+char kolKlikniecie(Point2i *r, Point2i *c, Point *lg, Point *pg, Point *ld,int distance_req){
     int distance=(r->x-c->x)*(r->x-c->x)+(r->y-c->y)*(r->y-c->y);
-    if (distance<1200){ //czyli, ze jest klikniecie
+    if (distance<distance_req){ //czyli, ze jest klikniecie
         float klpoz, klpion;
         klpion = (ld->y - lg->y)/5;
         klpoz = (pg->x - lg->x)/11;
@@ -556,3 +556,4 @@ char kolKlikniecie(Point2i *r, Point2i *c, Point *lg, Point *pg, Point *ld){
     }
 return 0;
 }
+

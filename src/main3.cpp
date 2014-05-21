@@ -2,6 +2,9 @@
 #include "functions.h"
 #define WINVER 0x0500   //
 #include <windows.h>    //do klawiatury
+#include <fstream>
+#include <conio.h>
+#include <stdio.h>
 using namespace std;
 
 int a=115;
@@ -25,12 +28,17 @@ char nazwaokna2[] = "Ustawianie parametrow wykrywania reki";
 char nazwaokna3[] = "Ustawianie parametrow wykrywania cienia";
 char nazwaokna4[] = "Podglad wynikow";
 char key,option;
+char model='E';
 Mat frame, channel[3], tlo,maska,ycrcb, reka,cien;
 VideoCapture capture(0);
 vector<Point> brzegi;
 INPUT ip;
-std::ostringstream str;
+std::ostringstream str ;
 bool bylaKalibracja=false;
+
+char sciezk[50];
+
+
 
 int ustawTlo()
 {
@@ -57,8 +65,8 @@ int ustawTlo()
             circle( channel[0], center, 3, Scalar(0,255,0), -1, 8, 0 );      // circle center
             circle( channel[0], center, radius, Scalar(0,0,255), 3, 8, 0 );      // circle outline
         }
-//        putText(channel[0], "Twojastara", cvPoint(30,30),
-//            FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
+        putText(channel[0], "Ustaw znaczniki", cvPoint(30,30),
+            FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
         imshow(nazwaokna, channel[0]);
         key = cvWaitKey(10);
         if (key == 27){
@@ -111,6 +119,8 @@ int ustawReke()
         reka &= maska;
 
         imshow(nazwaokna2, reka);
+        putText(reka, "Ustaw suwaki aby wyodrebnic palec", cvPoint(30,30),
+            FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
         key = cvWaitKey(10);
         if (key == 27){
             cout << "Nacisnieto ESC" << endl;
@@ -181,6 +191,8 @@ int ustawKlik()
         tym[1]=cien;
         merge(tym,3,polaczone);
         imshow("Ustaw klikniecie", polaczone);
+        putText(polaczone, "Przytrzymaj klawisz i wcisnij ENTER", cvPoint(30,30),
+            FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
         tym[2]=cv::Mat::zeros(frame.size(),CV_8UC1);
 
         key = cvWaitKey(10);
@@ -190,7 +202,7 @@ int ustawKlik()
             return -1;
         }
         if (key == 13) {
-            dist_req=(r->x-p->x)*(r->x-p->x)+(r->y-p->y)*(r->y-p->y);
+            dist_req=(r->x-p->x)*(r->x-p->x)+(r->y-p->y)*(r->y-p->y) -20;
             cout << "Nacisnieto ENTER, odleglosc zapisana " << endl;
             destroyAllWindows();
             break;
@@ -200,10 +212,11 @@ int ustawKlik()
 }
     return 0;
 }
-int klawiatura_system()
-{
 
+int klawiatura_podglad()
+{
     cvNamedWindow(nazwaokna4, CV_WINDOW_AUTOSIZE); //Create window
+     str << "kolKlikniecie zwrocil: " ;
     Point2i *r,*p;
     Mat polaczone;
     Mat tym[3];
@@ -229,14 +242,15 @@ int klawiatura_system()
         merge(tym,3,polaczone);
             //str << "Pozycja palca: (" << (*r).x << "," << (*r).y << ")";
             znak = kolKlikniecie(r,p,&(brzegi[0]), &(brzegi[1]), &(brzegi[2]),dist_req);
-            str << "kolKlikniecie zwrocil: " << znak;
+
             if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
                 ip.ki.wVk = VkKeyScan(znak);        //wysyla przerwanie klawiatury
                 SendInput(1, &ip, sizeof(INPUT));   //nie dziala przytrzymanie klawisza
             }
+            imshow(nazwaokna4, polaczone);
             putText(polaczone, str.str(), cvPoint(30,30),
             FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
-        imshow(nazwaokna4, polaczone);
+
 
         tym[2]=cv::Mat::zeros(frame.size(),CV_8UC1);
 
@@ -252,8 +266,107 @@ int klawiatura_system()
             break;
         }
     }
+
+
     return 0;
 }
+
+
+int klawiatura_system()
+{
+
+
+    Point2i *r,*p;
+    Mat polaczone;
+    Mat tym[3];
+        tym[2]=cv::Mat::zeros(tlo.size(),CV_8UC1);
+    char znak;
+
+    cout<<"Klawiatura na standard. aby wyjsc wcisnij enter"<<endl;
+    while(capture.read(frame) && !kbhit()){
+        split(frame, channel);
+        cvtColor(frame, ycrcb, CV_BGR2YCrCb);
+        inRange(ycrcb, Scalar(ymin, tc, ta), Scalar(ymax, td, tb), reka);
+        reka &= maska;
+        cien = channel[2] + reka;
+        threshold(cien,cien,levelBin,255,1);
+        cien &= maska;
+
+        r=najwyzej(reka);
+        p=najwyzej(cien);
+
+        tym[0]=reka;
+        tym[1]=cien;
+
+        merge(tym,3,polaczone);
+            znak = kolKlikniecie(r,p,&(brzegi[0]), &(brzegi[1]), &(brzegi[2]),dist_req);
+            if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
+                ip.ki.wVk = VkKeyScan(znak);        //wysyla przerwanie klawiatury
+                SendInput(1, &ip, sizeof(INPUT));   //nie dziala przytrzymanie klawisza
+            }
+
+        tym[2]=cv::Mat::zeros(frame.size(),CV_8UC1);
+    }
+
+    return 0;
+}
+
+int klawiatura_dopliku(char* sciezka)
+{
+    fstream pl(sciezka,ios::out);
+    if(!pl.good()) return -1;
+
+
+    str << "kolKlikniecie zwrocil: " ;
+    cvNamedWindow("DoPliku", CV_WINDOW_AUTOSIZE); //Create window
+    Point2i *r,*p;
+    Mat polaczone;
+    Mat tym[3];
+        tym[2]=cv::Mat::zeros(tlo.size(),CV_8UC1);
+    char znak;
+    while(capture.read(frame)){
+        split(frame, channel);
+        cvtColor(frame, ycrcb, CV_BGR2YCrCb);
+        inRange(ycrcb, Scalar(ymin, tc, ta), Scalar(ymax, td, tb), reka);
+        reka &= maska;
+        cien = channel[2] + reka;
+        threshold(cien,cien,levelBin,255,1);
+        cien &= maska;
+        r=najwyzej(reka);
+        p=najwyzej(cien);
+
+        line(tym[2], *r, *p, cv::Scalar(255), 3,8,0);
+        tym[0]=reka;
+        tym[1]=cien;
+        merge(tym,3,polaczone);
+        znak = kolKlikniecie(r,p,&(brzegi[0]), &(brzegi[1]), &(brzegi[2]),dist_req);
+        str<< znak;
+        pl<<znak;
+        //pl.flush();
+        imshow("DoPliku", polaczone);
+        putText(polaczone, str.str(), cvPoint(30,30),
+            FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
+        tym[2]=cv::Mat::zeros(frame.size(),CV_8UC1);
+
+        key = cvWaitKey(10);
+        if (key == 27){
+            cout << "Nacisnieto ESC" << endl;
+            destroyAllWindows();
+            pl.close();
+            return -1;
+        }
+        if (key == 13) {
+            cout << "Nacisnieto ENTER, konczymy impreze" << endl;//trzeba bedzie to w dzialajacej wersji usunac
+            destroyAllWindows();
+            pl.close();
+            break;
+        }
+    }
+    return 0;
+}
+
+
+
 int main(){
                       //
     ip.type = INPUT_KEYBOARD;   //
@@ -284,14 +397,18 @@ int main(){
     do
     {
         cout<<string(22, '\n');
-        cout<<"KLAWIATURA <<<<<<<<<<<"<<endl;
+        cout<<"KLAWIATURA <<<<<<<<<<<<<"<<endl;
+        cout<<"Model : "<<model<<endl<<endl;
+
+        if(model=='E'){
         cout<<"Kalibracja (k)"<<endl;
         cout<<"Odpal klawiature jako standard. (s)"<<endl;
         cout<<"Odpal klawiature - podglad wyniku (w)"<<endl;
         cout<<"Odpal klawiature i zapisuj do pliku (p)"<<endl;
         cout<<"Zmiana modelu klawiatury (m)"<<endl;
+        cout<<"Wczytaj znaki z filmu (f)"<<endl;
         cout<<"Wyjscie (q)"<<endl;
-
+        }
         cin>>option;
         switch(option)
         {
@@ -312,6 +429,31 @@ int main(){
             case 's':
             {
                 if(!bylaKalibracja || klawiatura_system()==-1 ) return 0;
+                break;
+            }
+            case 'w':
+            {
+                    if(!bylaKalibracja || klawiatura_podglad()==-1) return 0;
+                    break;
+            }
+            case 'p':
+            {
+                cout<<"Podaj bezwzgledna sciezke do zapisu"<<endl;
+                scanf("%s",sciezk);
+                if(!bylaKalibracja || klawiatura_dopliku(sciezk)==-1) return 0;
+                break;
+            }
+            case 'f':
+            {
+                cout<<"Podaj bezwzgledna sciezke do filmu"<<endl;
+                scanf("%s",sciezk);
+           //     if(!bylaKalibracja || klawiatura_zfilmu(sciezk)==-1) return 0;
+                break;
+            }
+            case 'm':
+            {
+                if(model=='E') model='T';
+                else model='E';
                 break;
             }
 

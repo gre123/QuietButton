@@ -252,7 +252,7 @@
 //    destroyWindow(shadow);
 //    return 0;
 //}
-
+//
 //   // kontury(frame2,150);
 //   // kontury(frame,150);
 //   // morphSize=4;

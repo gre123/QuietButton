@@ -556,4 +556,35 @@ char kolKlikniecie(Point2i *r, Point2i *c, Point *lg, Point *pg, Point *ld,int d
     }
 return 0;
 }
+Point* najlepiej(Mat *obr){
+    Mat pom;
+    (*obr).copyTo(pom);
+    int largest_area=0;
+    //Rect bounding_rect;
+    int largest_contour_index=0;
+    vector<vector<Point> > contours;
+    findContours( pom, contours,CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+    for( int i = 0; i< contours.size(); i++ ){        // iterate through each contour.
+        double a=contourArea( contours[i],false);       //  Find the area of contour
+        if(a>largest_area){
+            largest_area=a;
+            largest_contour_index=i;                //Store the index of largest contour
+            //bounding_rect=boundingRect(contours[i]); // Find the bounding rectangle for biggest contour
+        }
+    }
+    //czyli mam contours[largest_contour_index] - kontur palca, teraz najwyzszy punkt
+    //mozna by to przeniesc do odddzielnej funkcji
+    int hpx=pom.size().width, hpy=pom.size().height;
+    if (contours.size()>0){
+        int highest_point_index=0;
+        for( int i = 0; i< (contours[largest_contour_index]).size(); i++ ){
+            if((contours[largest_contour_index][i]).y<hpy){
+                hpx=(contours[largest_contour_index][i]).x;
+                hpy=(contours[largest_contour_index][i]).y;
+            }
+        }
+        drawContours(*obr, contours,largest_contour_index, Scalar(255), 3, 0 );
+    }
+    return new Point2i(hpx,hpy);
+}
 

@@ -30,6 +30,7 @@ vector<Vec3f> tloznaczniki(VideoCapture &capture,Mat *tlo);
 vector<Point> vec3fToPoint(vector<Vec3f> vec);
 void myszkaCallback(int event, int x, int y, int flags, void* kolka);
 char kolKlikniecie(Point2i *r, Point2i *c, Point *lg, Point *pg, Point *ld,int distance_req);
+Point* najlepiej(Mat *obr);
 
 
 #endif

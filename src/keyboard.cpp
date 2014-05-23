@@ -38,7 +38,8 @@ cv::line(image, markers->at(1), markers->at(3), cv::Scalar(255,0,0), 2, CV_AA);
 cv::line(image, markers->at(3), markers->at(2), cv::Scalar(255,0,0), 2, CV_AA);
 cv::line(image, markers->at(2), markers->at(0), cv::Scalar(255,0,0), 2, CV_AA);
 ///
-Point shiftPoint=Point (markers->at(0).x+templateImage.rows/2,markers->at(0).y+templateImage.cols/2);
+//Point shiftPoint=Point (markers->at(0).x+templateImage.rows/2,markers->at(0).y+templateImage.cols/2);
+Point shiftPoint=Point (0,0);
 
 for (int i=0;i<klawisze->size();i++){
  rectangle( image, Point(klawisze->at(i).x,klawisze->at(i).y)+shiftPoint, Point( klawisze->at(i).x+klawisze->at(i).width, klawisze->at(i).y+klawisze->at(i).height)+shiftPoint, cv::Scalar(50,255,0), 2, 8, 0 );
@@ -48,7 +49,7 @@ for (int i=0;i<klawisze->size();i++){
 }
 //
 }
-void keyboard::translateKeyboardCords(){
+void keyboard::translateKeyboardCords(Mat &templateImage){
 
 float xCof=(markers->at(1).x-markers->at(0).x)/(float)widthReal;
 float yCof=(markers->at(2).y-markers->at(0).y)/(float)heightReal;
@@ -58,14 +59,16 @@ float yCof1=(markers->at(3).y-markers->at(1).y)/(float)heightReal;
 float heightShift=markers->at(1).y-markers->at(0).y;
 float widthShift=markers->at(2).x-markers->at(0).x;
 
-cout<<xCof<<" - "<<yCof<<endl;
-cout<<widthShift<<" - "<<heightShift<<endl;
+Point shiftPoint=Point (markers->at(0).x+templateImage.rows/2,markers->at(0).y+templateImage.cols/2);
+
+//cout<<xCof<<" - "<<yCof<<endl;
+//cout<<widthShift<<" - "<<heightShift<<endl;
 
 for (int i=0;i<klawisze->size();i++){
-    klawisze->at(i).x*=   xCof;
-    klawisze->at(i).width*=   xCof;
-    klawisze->at(i).y*=   yCof;
-    klawisze->at(i).height*=   yCof;
+    klawisze->at(i).x= klawisze->at(i).x*  xCof+shiftPoint.x;
+    klawisze->at(i).width=klawisze->at(i).width*   xCof;
+    klawisze->at(i).y=klawisze->at(i).y*   yCof+shiftPoint.y;
+    klawisze->at(i).height=klawisze->at(i).height*   yCof;
     ///
 
     for(int j=0;j<4;j++){
@@ -88,14 +91,16 @@ int tx=x;
 int ty=y;
 x=(x*(xCof*(ty/heightReal)+xCof1*(heightReal-ty)/heightReal))+(ty/heightReal)*markers->at(0).x+(heightReal-ty)/heightReal*markers->at(2).x;
 y=(y*(yCof*(tx/widthReal)+yCof1*(widthReal-tx)/widthReal))+(tx/widthReal)*markers->at(0).y+(widthReal-tx)/widthReal*markers->at(1).y;
-cout<<x<<"###"<<y<<endl;
+//cout<<x<<"###"<<y<<endl;
 }
 char keyboard::getKlawisz(Point2i palecPoint, Point2i cienPoint){
 int distance=(palecPoint.x-cienPoint.x)*(palecPoint.x-cienPoint.x)+(palecPoint.y-cienPoint.y)*(palecPoint.y-cienPoint.y);
+
 if (distance<1300){
+   // cout<<palecPoint.x<<"---"<<palecPoint.y<<endl;
     for(int i=0;i<klawisze->size();i++){
         if (klawisze->at(i).x<palecPoint.x && klawisze->at(i).y<palecPoint.y
-            &&klawisze->at(i).width+klawisze->at(i).x>palecPoint.x && klawisze->at(i).height+klawisze->at(i).y<palecPoint.y){
+            &&klawisze->at(i).width+klawisze->at(i).x>palecPoint.x && klawisze->at(i).height+klawisze->at(i).y>palecPoint.y){
             return klawisze->at(i).character;
             }
     }

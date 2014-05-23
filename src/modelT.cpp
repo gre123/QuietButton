@@ -45,6 +45,7 @@ int modelT::klawiatura_zfilmu(string sciezka)
 
   /// Create windows
     namedWindow(mainWindowName, CV_WINDOW_AUTOSIZE);
+    namedWindow("back", CV_WINDOW_AUTOSIZE);
   /// Create Trackbar
     createTrackbar( "level1", mainWindowName, &levelBin, 255, 0 );
     createTrackbar( "level2", mainWindowName, &levelBin2, 255, 0 );
@@ -55,9 +56,9 @@ int modelT::klawiatura_zfilmu(string sciezka)
 
     background= findBackGround(capture,klawiatura,templateImage);
     background.copyTo(tempImg);
-    klawiatura->translateKeyboardCords();
+    klawiatura->translateKeyboardCords(templateImage);
     klawiatura->drawKeyBoard(tempImg,templateImage);
-
+    imshow("back",tempImg);
     while(capture.read(frame)){
     std::ostringstream str;
     str << "nacisnieto : " ;
@@ -71,6 +72,7 @@ int modelT::klawiatura_zfilmu(string sciezka)
         char znak=klawiatura->getKlawisz(*r,*p);
         if (znak!=0){
             str<<znak;
+            //cout<<znak;
             ip.ki.wVk = VkKeyScan(znak);        //wysyla przerwanie klawiatury
             SendInput(1, &ip, sizeof(INPUT));   //nie dziala przytrzymanie klawisza
             putText(frame, str.str(), cvPoint(30,30),
@@ -131,7 +133,7 @@ int modelT::klawiatura_podglad(VideoCapture capture)
 
     background= findBackGround(capture,klawiatura,templateImage);
     background.copyTo(tempImg);
-    klawiatura->translateKeyboardCords();
+    klawiatura->translateKeyboardCords(templateImage);
     klawiatura->drawKeyBoard(tempImg,templateImage);
 
     while(capture.read(frame)){

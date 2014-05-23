@@ -313,8 +313,7 @@ int klawiatura_system()
 int klawiatura_dopliku(char* sciezka)
 {
     fstream pl(sciezka,ios::out);
-    if(!pl.good()) return -1;
-
+    if(!pl.good()){ return -1;}
 
     str << "kolKlikniecie zwrocil: " ;
     cvNamedWindow("DoPliku", CV_WINDOW_AUTOSIZE); //Create window
@@ -366,7 +365,6 @@ int klawiatura_dopliku(char* sciezka)
 
 int klawiatura_zfilmu(string sciezka)
 {
-
     return 0;
 }
 
@@ -378,7 +376,6 @@ int main(){
     ip.ki.dwExtraInfo = 0;      //
     ip.ki.dwFlags = 0; // 0 for key press
 
-
     // open the video file for reading
     if (!capture.isOpened()){
          cout << "Nie znalazlem kamery!" << endl;
@@ -386,14 +383,6 @@ int main(){
     }
     capture.set(CV_CAP_PROP_FRAME_WIDTH, 800);
     capture.set(CV_CAP_PROP_FRAME_HEIGHT, 600);
-
-
-
-
-
-
-
-
 
 ///Chyba wszystko ustawione, teraz koncowe wyswietlanie
 

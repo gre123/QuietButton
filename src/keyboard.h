@@ -23,7 +23,7 @@ public:
 char getKey(int x, int y);
 void setKeyboard(std::vector<cv::Point> * _markers);
 void drawKeyBoard(cv::Mat &image,Mat &templateImage);
-void translateKeyboardCords();
+void translateKeyboardCords(Mat &templateImage);
 char getKlawisz(Point2i palecPoint, Point2i cienPoint);
 void setCameraCord(int &x,int &y);
 };

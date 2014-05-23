@@ -3,7 +3,6 @@
 //#include<opencv2/opencv.hpp>//bardzo ogolna biblioteka na koncu zmienic
 //#include <iostream>
 #include <math.h>
-#include "enums.h"
 #include "keyboard.h"
 using namespace std;
 using namespace cv;

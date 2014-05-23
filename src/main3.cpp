@@ -1,5 +1,5 @@
 //#include <iostream>
-#include "functions.h"
+#include "modelT.h"
 #define WINVER 0x0500   //
 #include <windows.h>    //do klawiatury
 #include <fstream>
@@ -35,9 +35,8 @@ vector<Point> brzegi;
 INPUT ip;
 std::ostringstream str ;
 bool bylaKalibracja=false;
-
 char sciezk[50];
-
+modelT modT;
 
 
 int ustawTlo()
@@ -365,7 +364,11 @@ int klawiatura_dopliku(char* sciezka)
     return 0;
 }
 
+int klawiatura_zfilmu(string sciezka)
+{
 
+    return 0;
+}
 
 int main(){
                       //
@@ -409,6 +412,14 @@ int main(){
         cout<<"Wczytaj znaki z filmu (f)"<<endl;
         cout<<"Wyjscie (q)"<<endl;
         }
+
+        if(model=='T'){
+        cout<<"Odpal klawiature - podglad wyniku (w)"<<endl;
+        cout<<"Zmiana modelu klawiatury (m)"<<endl;
+        cout<<"Wczytaj znaki z filmu (f)"<<endl;
+        cout<<"Wyjscie (q)"<<endl;
+        }
+
         cin>>option;
         switch(option)
         {
@@ -433,7 +444,8 @@ int main(){
             }
             case 'w':
             {
-                    if(!bylaKalibracja || klawiatura_podglad()==-1) return 0;
+                if(model=='E') if(!bylaKalibracja || klawiatura_podglad()==-1) return 0;
+                else if(modT.klawiatura_podglad(capture)==-1) return 0;
                     break;
             }
             case 'p':
@@ -447,7 +459,11 @@ int main(){
             {
                 cout<<"Podaj bezwzgledna sciezke do filmu"<<endl;
                 scanf("%s",sciezk);
-           //     if(!bylaKalibracja || klawiatura_zfilmu(sciezk)==-1) return 0;
+                if(model=='T')
+                {
+                    if(modT.klawiatura_zfilmu(sciezk)==-1) return 0;
+                }
+                else if(!bylaKalibracja || klawiatura_zfilmu(sciezk)==-1) return 0;
                 break;
             }
             case 'm':

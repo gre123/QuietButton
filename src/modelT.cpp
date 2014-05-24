@@ -56,14 +56,15 @@ int modelT::klawiatura_zfilmu(string sciezka)
 
     background= findBackGround(capture,klawiatura,templateImage);
     background.copyTo(tempImg);
-    klawiatura->translateKeyboardCords(templateImage);
-    klawiatura->drawKeyBoard(tempImg,templateImage);
-    imshow("back",tempImg);
+    klawiatura->translateKeyboardCords(templateImage.cols);
+    klawiatura->drawKeyBoard(tempImg);
+
     while(capture.read(frame)){
     std::ostringstream str;
     str << "nacisnieto : " ;
 
     cien_palec(frame,background,dlon,cien);
+
     Point2i *r=najwyzej(dlon);
     Point2i *p=najwyzej(cien);
 
@@ -133,8 +134,8 @@ int modelT::klawiatura_podglad(VideoCapture capture)
 
     background= findBackGround(capture,klawiatura,templateImage);
     background.copyTo(tempImg);
-    klawiatura->translateKeyboardCords(templateImage);
-    klawiatura->drawKeyBoard(tempImg,templateImage);
+    klawiatura->translateKeyboardCords(templateImage.cols);
+    klawiatura->drawKeyBoard(tempImg);
 
     while(capture.read(frame)){
     std::ostringstream str;

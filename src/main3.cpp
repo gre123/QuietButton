@@ -27,6 +27,7 @@ char nazwaokna[] = "Podglad kamery - ustawianie tla";
 char nazwaokna2[] = "Ustawianie parametrow wykrywania reki";
 char nazwaokna3[] = "Ustawianie parametrow wykrywania cienia";
 char nazwaokna4[] = "Podglad wynikow";
+char nazwaokna5[] = "Model Klawiatury";
 char key,option;
 char model='E';
 Mat frame, channel[3], tlo,maska,ycrcb, reka,cien;
@@ -37,10 +38,9 @@ std::ostringstream str ;
 bool bylaKalibracja=false;
 char sciezk[50];
 modelT modT;
+keyboard * klawiatura;
 
-
-int ustawTlo()
-{
+int ustawTlo(){
     int u1=150;
     int u2=100;
 
@@ -95,12 +95,9 @@ int ustawTlo()
     maska(boundingrect) = 255;
 
     return 0;
-
 }
 
-
-int ustawReke()
-{
+int ustawReke(){
 
     cvNamedWindow(nazwaokna2, CV_WINDOW_AUTOSIZE); //Create window
 
@@ -135,8 +132,7 @@ int ustawReke()
     return 0;
 }
 
-int ustawCien()
-{
+int ustawCien(){
 
 
     cvNamedWindow(nazwaokna3, CV_WINDOW_AUTOSIZE); //Create window
@@ -155,8 +151,7 @@ int ustawCien()
             cout << "Nacisnieto ESC" << endl;
             destroyAllWindows();
             return -1;
-        }
-        if (key == 13) {
+        }else if (key == 13) {
             cout << "Nacisnieto ENTER, parametry wykrywania cienia zapisane" << endl;
             destroyAllWindows();
             break;
@@ -218,9 +213,21 @@ int klawiatura_podglad()
      str << "kolKlikniecie zwrocil: " ;
     Point2i *r,*p;
     Mat polaczone;
+    Mat tempImg;
+
     Mat tym[3];
         tym[2]=cv::Mat::zeros(tlo.size(),CV_8UC1);
     char znak;
+
+
+    //// model z  klawiatura
+    cvNamedWindow(nazwaokna5, CV_WINDOW_AUTOSIZE); //Create window
+    klawiatura->setKeyboard(&brzegi);
+    tlo.copyTo(tempImg);
+    klawiatura->translateKeyboardCordsElp(25);
+    klawiatura->drawKeyBoard(tempImg);
+    imshow(nazwaokna5,tempImg);
+    ////
 //cout << "echodze do while'a 4" << endl;
     while(capture.read(frame)){
         split(frame, channel);
@@ -273,10 +280,9 @@ int klawiatura_podglad()
 
 int klawiatura_system()
 {
-
-
     Point2i *r,*p;
     Mat polaczone;
+   // Mat tempImg;
     Mat tym[3];
         tym[2]=cv::Mat::zeros(tlo.size(),CV_8UC1);
     char znak;
@@ -365,6 +371,7 @@ int klawiatura_dopliku(char* sciezka)
 
 int klawiatura_zfilmu(string sciezka)
 {
+
     return 0;
 }
 
@@ -383,7 +390,7 @@ int main(){
     }
     capture.set(CV_CAP_PROP_FRAME_WIDTH, 800);
     capture.set(CV_CAP_PROP_FRAME_HEIGHT, 600);
-
+    klawiatura=new keyboard(264,120);
 ///Chyba wszystko ustawione, teraz koncowe wyswietlanie
 
     do

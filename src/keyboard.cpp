@@ -26,13 +26,40 @@ widthReal=_widthReal;
 heightReal=_heightReal;
 klawisze=new std::vector<key>();
 
-klawisze->push_back(key('q',0,0,90,55));
-klawisze->push_back(key('w',90,0,90,55));
-klawisze->push_back(key('e',0,55,90,55));
-klawisze->push_back(key('r',90,55,90,55));
+klawisze->push_back(key('q',0,0,25,25));
+klawisze->push_back(key('w',25,0,25,25));
+klawisze->push_back(key('e',50,0,25,25));
+klawisze->push_back(key('r',75,0,25,25));
+klawisze->push_back(key('t',100,0,25,25));
+klawisze->push_back(key('y',125,0,25,25));
+klawisze->push_back(key('u',150,0,25,25));
+klawisze->push_back(key('i',175,0,25,25));
+klawisze->push_back(key('o',200,0,25,25));
+klawisze->push_back(key('p',225,0,25,25));
+
+klawisze->push_back(key('a',0,25,25,25));
+klawisze->push_back(key('s',25,25,25,25));
+klawisze->push_back(key('d',50,25,25,25));
+klawisze->push_back(key('e',75,25,25,25));
+klawisze->push_back(key('f',100,25,25,25));
+klawisze->push_back(key('g',125,25,25,25));
+klawisze->push_back(key('h',150,25,25,25));
+klawisze->push_back(key('j',175,25,25,25));
+klawisze->push_back(key('k',200,25,25,25));
+klawisze->push_back(key('l',225,25,25,25));
+
+klawisze->push_back(key('z',25,50,25,25));
+klawisze->push_back(key('x',50,50,25,25));
+klawisze->push_back(key('c',75,50,25,25));
+klawisze->push_back(key('v',100,50,25,25));
+klawisze->push_back(key('b',125,50,25,25));
+klawisze->push_back(key('n',150,50,25,25));
+klawisze->push_back(key('m',175,50,25,25));
+
+klawisze->push_back(key((char)32,25,75,175,25));
 }
 
-void keyboard::drawKeyBoard(cv::Mat &image,Mat &templateImage){
+void keyboard::drawKeyBoard(cv::Mat &image){
 cv::line(image, markers->at(0), markers->at(1), cv::Scalar(255,0,0), 2, CV_AA);
 cv::line(image, markers->at(1), markers->at(3), cv::Scalar(255,0,0), 2, CV_AA);
 cv::line(image, markers->at(3), markers->at(2), cv::Scalar(255,0,0), 2, CV_AA);
@@ -49,36 +76,41 @@ for (int i=0;i<klawisze->size();i++){
 }
 //
 }
-void keyboard::translateKeyboardCords(Mat &templateImage){
+void keyboard::translateKeyboardCords(int markerSize){
 
 float xCof=(markers->at(1).x-markers->at(0).x)/(float)widthReal;
 float yCof=(markers->at(2).y-markers->at(0).y)/(float)heightReal;
 float xCof1=(markers->at(3).x-markers->at(2).x)/(float)widthReal;
 float yCof1=(markers->at(3).y-markers->at(1).y)/(float)heightReal;
 
-float heightShift=markers->at(1).y-markers->at(0).y;
-float widthShift=markers->at(2).x-markers->at(0).x;
-
-Point shiftPoint=Point (markers->at(0).x+templateImage.rows/2,markers->at(0).y+templateImage.cols/2);
-
-//cout<<xCof<<" - "<<yCof<<endl;
-//cout<<widthShift<<" - "<<heightShift<<endl;
+Point shiftPoint=Point (markers->at(0).x+markerSize/2,markers->at(0).y+markerSize/2);
 
 for (int i=0;i<klawisze->size();i++){
     klawisze->at(i).x= klawisze->at(i).x*  xCof+shiftPoint.x;
     klawisze->at(i).width=klawisze->at(i).width*   xCof;
     klawisze->at(i).y=klawisze->at(i).y*   yCof+shiftPoint.y;
     klawisze->at(i).height=klawisze->at(i).height*   yCof;
-    ///
-
-    for(int j=0;j<4;j++){
-    setCameraCord(klawisze->at(i).vertex[j].x,klawisze->at(i).vertex[j].y);
-    }
-    ///
-
 }
 }
 
+void keyboard::translateKeyboardCordsElp(int markerSize){
+
+float xCof=(markers->at(1).x-markers->at(0).x)/(float)widthReal;
+float yCof=(markers->at(2).y-markers->at(0).y)/(float)heightReal;
+float xCof1=(markers->at(3).x-markers->at(2).x)/(float)widthReal;
+float yCof1=(markers->at(3).y-markers->at(1).y)/(float)heightReal;
+
+markerSize*=xCof;
+
+Point shiftPoint=Point (markers->at(0).x+markerSize/2,markers->at(0).y+markerSize/2);
+
+for (int i=0;i<klawisze->size();i++){
+    klawisze->at(i).x= klawisze->at(i).x*  xCof+shiftPoint.x;
+    klawisze->at(i).width=klawisze->at(i).width*   xCof;
+    klawisze->at(i).y=klawisze->at(i).y*   yCof+shiftPoint.y;
+    klawisze->at(i).height=klawisze->at(i).height*   yCof;
+}
+}
 void keyboard::setCameraCord(int &x,int &y){
 float xCof=(markers->at(1).x-markers->at(0).x)/(float)widthReal;
 float yCof=(markers->at(2).y-markers->at(0).y)/(float)heightReal;

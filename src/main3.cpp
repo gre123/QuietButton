@@ -209,6 +209,7 @@ int ustawKlik()
 
 int klawiatura_podglad()
 {
+    int licznik=0;
     cvNamedWindow(nazwaokna4, CV_WINDOW_AUTOSIZE); //Create window
      str << "kolKlikniecie zwrocil: " ;
     Point2i *r,*p;
@@ -249,10 +250,15 @@ int klawiatura_podglad()
             //str << "Pozycja palca: (" << (*r).x << "," << (*r).y << ")";
             znak = kolKlikniecie(r,p,&(brzegi[0]), &(brzegi[1]), &(brzegi[2]),dist_req);
 
-            if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
-                ip.ki.wVk = VkKeyScan(znak);        //wysyla przerwanie klawiatury
-                SendInput(1, &ip, sizeof(INPUT));   //nie dziala przytrzymanie klawisza
+           if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
+                if(licznik==0 || licznik>=50)
+                {
+                    ip.ki.wVk = VkKeyScan(znak);        //wysyla przerwanie klawiatury
+                    SendInput(1, &ip, sizeof(INPUT));   //nie dziala przytrzymanie klawisza
+                }
+                licznik++;
             }
+            else licznik=0;
             imshow(nazwaokna4, polaczone);
             putText(polaczone, str.str(), cvPoint(30,30),
             FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
@@ -280,6 +286,7 @@ int klawiatura_podglad()
 
 int klawiatura_system()
 {
+    int licznik=0;
     Point2i *r,*p;
     Mat polaczone;
    // Mat tempImg;
@@ -306,9 +313,14 @@ int klawiatura_system()
         merge(tym,3,polaczone);
             znak = kolKlikniecie(r,p,&(brzegi[0]), &(brzegi[1]), &(brzegi[2]),dist_req);
             if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
-                ip.ki.wVk = VkKeyScan(znak);        //wysyla przerwanie klawiatury
-                SendInput(1, &ip, sizeof(INPUT));   //nie dziala przytrzymanie klawisza
+                if(licznik==0 || licznik>=50)
+                {
+                    ip.ki.wVk = VkKeyScan(znak);        //wysyla przerwanie klawiatury
+                    SendInput(1, &ip, sizeof(INPUT));   //nie dziala przytrzymanie klawisza
+                }
+                licznik++;
             }
+            else licznik=0;
 
         tym[2]=cv::Mat::zeros(frame.size(),CV_8UC1);
     }
@@ -318,6 +330,7 @@ int klawiatura_system()
 
 int klawiatura_dopliku(char* sciezka)
 {
+    int licznik =0;
     fstream pl(sciezka,ios::out);
     if(!pl.good()){ return -1;}
 
@@ -344,8 +357,16 @@ int klawiatura_dopliku(char* sciezka)
         tym[1]=cien;
         merge(tym,3,polaczone);
         znak = kolKlikniecie(r,p,&(brzegi[0]), &(brzegi[1]), &(brzegi[2]),dist_req);
-        str<< znak;
-        pl<<znak;
+         if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
+                if(licznik==0 || licznik>=50)
+                {
+                    str<< znak;
+                    pl<<znak;
+                }
+                licznik++;
+            }
+            else licznik=0;
+
         //pl.flush();
         imshow("DoPliku", polaczone);
         putText(polaczone, str.str(), cvPoint(30,30),

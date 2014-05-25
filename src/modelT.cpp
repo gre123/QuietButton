@@ -70,7 +70,7 @@ int modelT::klawiatura_zfilmu(string sciezka)
 
     if (r!=0 && p!=0){
         cv::line(frame, *r, *p, cv::Scalar(255,0,0), 2, CV_AA);
-        char znak=klawiatura->getKlawisz(*r,*p);
+        char znak=klawiatura->getKlawisz(*r,*p,35);
         if (znak!=0){
             str<<znak;
             //cout<<znak;
@@ -147,7 +147,7 @@ int modelT::klawiatura_podglad(VideoCapture capture)
 
     if (r!=0 && p!=0){
         cv::line(frame, *r, *p, cv::Scalar(255,0,0), 2, CV_AA);
-        char znak=klawiatura->getKlawisz(*r,*p);
+        char znak=klawiatura->getKlawisz(*r,*p,35);
         if (znak!=0){
             str<<znak;
             putText(frame, str.str(), cvPoint(30,30),

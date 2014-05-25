@@ -22,7 +22,6 @@ Point2i *najwyzej(Mat &obr);
 void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2);
 void odejm(Mat &obr,Mat &tlo,int p,int q);
 Mat shiftFrame(Mat &frame, int horizontalShift, int verticalShift);
-void processVideo(char* videoFilename);
 vector<Point> * findKeyboard(Mat &frame,Mat &backgroundFrame,Mat &templateImage);
 Mat findBackGround(VideoCapture &capture,keyboard *klawiatura,Mat &templateImage);
 vector<Vec3f> tloznaczniki(VideoCapture &capture,Mat *tlo);

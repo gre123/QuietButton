@@ -125,10 +125,10 @@ x=(x*(xCof*(ty/heightReal)+xCof1*(heightReal-ty)/heightReal))+(ty/heightReal)*ma
 y=(y*(yCof*(tx/widthReal)+yCof1*(widthReal-tx)/widthReal))+(tx/widthReal)*markers->at(0).y+(widthReal-tx)/widthReal*markers->at(1).y;
 //cout<<x<<"###"<<y<<endl;
 }
-char keyboard::getKlawisz(Point2i palecPoint, Point2i cienPoint){
+char keyboard::getKlawisz(Point2i palecPoint, Point2i cienPoint,int minimalDist=35){
 int distance=(palecPoint.x-cienPoint.x)*(palecPoint.x-cienPoint.x)+(palecPoint.y-cienPoint.y)*(palecPoint.y-cienPoint.y);
-
-if (distance<1300){
+minimalDist*=minimalDist;
+if (distance<minimalDist){
    // cout<<palecPoint.x<<"---"<<palecPoint.y<<endl;
     for(int i=0;i<klawisze->size();i++){
         if (klawisze->at(i).x<palecPoint.x && klawisze->at(i).y<palecPoint.y

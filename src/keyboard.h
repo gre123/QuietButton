@@ -25,7 +25,7 @@ void setKeyboard(std::vector<cv::Point> * _markers);
 void drawKeyBoard(cv::Mat &image);
 void translateKeyboardCords(int markerSize);
 void translateKeyboardCordsElp(int markerSize);
-char getKlawisz(Point2i palecPoint, Point2i cienPoint);
+char getKlawisz(Point2i palecPoint, Point2i cienPoint,int minimalDist);
 void setCameraCord(int &x,int &y);
 };
 #endif

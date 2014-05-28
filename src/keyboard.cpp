@@ -26,37 +26,41 @@ widthReal=_widthReal;
 heightReal=_heightReal;
 klawisze=new std::vector<key>();
 
-klawisze->push_back(key('q',0,0,25,25));
-klawisze->push_back(key('w',25,0,25,25));
-klawisze->push_back(key('e',50,0,25,25));
-klawisze->push_back(key('r',75,0,25,25));
-klawisze->push_back(key('t',100,0,25,25));
-klawisze->push_back(key('y',125,0,25,25));
-klawisze->push_back(key('u',150,0,25,25));
-klawisze->push_back(key('i',175,0,25,25));
-klawisze->push_back(key('o',200,0,25,25));
-klawisze->push_back(key('p',225,0,25,25));
+klawisze->push_back(key('q',0,0,24,24));
+klawisze->push_back(key('w',24,0,24,24));
+klawisze->push_back(key('e',48,0,24,24));
+klawisze->push_back(key('r',72,0,24,24));
+klawisze->push_back(key('t',96,0,24,24));
+klawisze->push_back(key('y',120,0,24,24));
+klawisze->push_back(key('u',144,0,24,24));
+klawisze->push_back(key('i',168,0,24,24));
+klawisze->push_back(key('o',192,0,24,24));
+klawisze->push_back(key('p',216,0,24,24));
 
-klawisze->push_back(key('a',0,25,25,25));
-klawisze->push_back(key('s',25,25,25,25));
-klawisze->push_back(key('d',50,25,25,25));
-klawisze->push_back(key('e',75,25,25,25));
-klawisze->push_back(key('f',100,25,25,25));
-klawisze->push_back(key('g',125,25,25,25));
-klawisze->push_back(key('h',150,25,25,25));
-klawisze->push_back(key('j',175,25,25,25));
-klawisze->push_back(key('k',200,25,25,25));
-klawisze->push_back(key('l',225,25,25,25));
+klawisze->push_back(key('a',0,24,24,24));
+klawisze->push_back(key('s',24,24,24,24));
+klawisze->push_back(key('d',48,24,24,24));
+klawisze->push_back(key('f',72,24,24,24));
+klawisze->push_back(key('g',96,24,24,24));
+klawisze->push_back(key('h',120,24,24,24));
+klawisze->push_back(key('j',144,24,24,24));
+klawisze->push_back(key('k',168,24,24,24));
+klawisze->push_back(key('l',192,24,24,24));
+klawisze->push_back(key(';',216,24,24,24));
 
-klawisze->push_back(key('z',25,50,25,25));
-klawisze->push_back(key('x',50,50,25,25));
-klawisze->push_back(key('c',75,50,25,25));
-klawisze->push_back(key('v',100,50,25,25));
-klawisze->push_back(key('b',125,50,25,25));
-klawisze->push_back(key('n',150,50,25,25));
-klawisze->push_back(key('m',175,50,25,25));
+klawisze->push_back(key('z',0,48,24,24));
+klawisze->push_back(key('x',24,48,24,24));
+klawisze->push_back(key('c',48,48,24,24));
+klawisze->push_back(key('v',72,48,24,24));
+klawisze->push_back(key('b',96,48,24,24));
+klawisze->push_back(key('n',120,48,24,24));
+klawisze->push_back(key('m',144,48,24,24));
+klawisze->push_back(key('/',168,48,24,24));
 
-klawisze->push_back(key((char)32,25,75,175,25));
+klawisze->push_back(key((char)15,0,72,24,24));
+klawisze->push_back(key((char)32,24,72,168,24));
+
+klawisze->push_back(key((char)13,192,48,48,48));
 }
 
 void keyboard::drawKeyBoard(cv::Mat &image){

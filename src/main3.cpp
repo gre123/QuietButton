@@ -210,8 +210,9 @@ int ustawKlik()
 int klawiatura_podglad()
 {
     int licznik=0;
+    std::ostringstream str ;
     cvNamedWindow(nazwaokna4, CV_WINDOW_AUTOSIZE); //Create window
-     str << "kolKlikniecie zwrocil: " ;
+    str << "Nacisnieto: " ;
     Point2i *r,*p;
     Mat polaczone;
     Mat tempImg;
@@ -222,13 +223,13 @@ int klawiatura_podglad()
 
 
     //// model z  klawiatura
-    cvNamedWindow(nazwaokna5, CV_WINDOW_AUTOSIZE); //Create window
-    klawiatura->setKeyboard(&brzegi);
-    tlo.copyTo(tempImg);
-    klawiatura->translateKeyboardCordsElp(25);
-    klawiatura->drawKeyBoard(tempImg);
-    imshow(nazwaokna5,tempImg);
-    ////
+//    cvNamedWindow(nazwaokna5, CV_WINDOW_AUTOSIZE); //Create window
+//    klawiatura->setKeyboard(&brzegi);
+//    tlo.copyTo(tempImg);
+//    klawiatura->translateKeyboardCordsElp(25);
+//    klawiatura->drawKeyBoard(tempImg);
+//    imshow(nazwaokna5,tempImg);
+//    ////
 //cout << "echodze do while'a 4" << endl;
     while(capture.read(frame)){
         split(frame, channel);
@@ -254,15 +255,15 @@ int klawiatura_podglad()
            if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
                 if(licznik==0 || licznik>=50)
                 {
-                    ip.ki.wVk = VkKeyScan(znak);        //wysyla przerwanie klawiatury
-                    SendInput(1, &ip, sizeof(INPUT));   //nie dziala przytrzymanie klawisza
+                    str<<znak;
                 }
                 licznik++;
             }
             else licznik=0;
-            imshow(nazwaokna4, polaczone);
             putText(polaczone, str.str(), cvPoint(30,30),
             FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
+            imshow(nazwaokna4, polaczone);
+
 
 
         tym[2]=cv::Mat::zeros(frame.size(),CV_8UC1);
@@ -463,7 +464,7 @@ int main(){
             case 'w':
             {
                 if(model=='E') if(!bylaKalibracja || klawiatura_podglad()==-1) return 0;
-                else if(modT.klawiatura_podglad(capture)==-1) return 0;
+                if(model=='T') if(modT.klawiatura_podglad(capture)==-1) return 0;
                     break;
             }
             case 'p':

@@ -45,8 +45,8 @@ int ustawTlo(){
     int u2=100;
 
     cvNamedWindow(nazwaokna, CV_WINDOW_AUTOSIZE); //Create window
-    createTrackbar( "Próg1", nazwaokna, &u1, 255, 0 );
-    createTrackbar( "Próg2", nazwaokna, &u2, 255, 0 );
+    createTrackbar( "PrÃ³g1", nazwaokna, &u1, 255, 0 );
+    createTrackbar( "PrÃ³g2", nazwaokna, &u2, 255, 0 );
     vector<Vec3f> circles;
     cvSetMouseCallback( nazwaokna, myszkaCallback, (void*) &circles); //do ewentualnego wyklikiwania naroznikow
     while(capture.read(frame)){ //Bedzie petla do wykrywania tla i kolek
@@ -210,9 +210,9 @@ int ustawKlik()
 int klawiatura_podglad()
 {
     int licznik=0;
-    std::ostringstream str ;
+
     cvNamedWindow(nazwaokna4, CV_WINDOW_AUTOSIZE); //Create window
-    str << "Nacisnieto: " ;
+
     Point2i *r,*p;
     Mat polaczone;
     Mat tempImg;
@@ -231,7 +231,11 @@ int klawiatura_podglad()
 //    imshow(nazwaokna5,tempImg);
 //    ////
 //cout << "echodze do while'a 4" << endl;
+
+    cout<<"Aby zakoÅ„czyc : enter na okienku"<<endl;
     while(capture.read(frame)){
+        std::ostringstream str ;
+        str << "Nacisnieto: " ;
         split(frame, channel);
         cvtColor(frame, ycrcb, CV_BGR2YCrCb);
         inRange(ycrcb, Scalar(ymin, tc, ta), Scalar(ymax, td, tb), reka);
@@ -249,8 +253,8 @@ int klawiatura_podglad()
         tym[1]=cien;
         merge(tym,3,polaczone);
             //str << "Pozycja palca: (" << (*r).x << "," << (*r).y << ")";
-          //  znak = kolKlikniecie(r,p,&(brzegi[0]), &(brzegi[1]), &(brzegi[2]),dist_req);
-             znak = klawiatura->getKlawisz(*r,*p,dist_req);
+           znak = kolKlikniecie(r,p,&(brzegi[0]), &(brzegi[1]), &(brzegi[2]),dist_req);
+           //  znak = klawiatura->getKlawisz(*r,*p,dist_req);
 
            if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
                 if(licznik==0 || licznik>=50)
@@ -335,8 +339,6 @@ int klawiatura_dopliku(char* sciezka)
     int licznik =0;
     fstream pl(sciezka,ios::out);
     if(!pl.good()){ return -1;}
-
-    str << "kolKlikniecie zwrocil: " ;
     cvNamedWindow("DoPliku", CV_WINDOW_AUTOSIZE); //Create window
     Point2i *r,*p;
     Mat polaczone;
@@ -344,6 +346,8 @@ int klawiatura_dopliku(char* sciezka)
         tym[2]=cv::Mat::zeros(tlo.size(),CV_8UC1);
     char znak;
     while(capture.read(frame)){
+        std::ostringstream str ;
+        str << "Nacisnieto: " ;
         split(frame, channel);
         cvtColor(frame, ycrcb, CV_BGR2YCrCb);
         inRange(ycrcb, Scalar(ymin, tc, ta), Scalar(ymax, td, tb), reka);
@@ -369,10 +373,10 @@ int klawiatura_dopliku(char* sciezka)
             }
             else licznik=0;
 
-        //pl.flush();
-        imshow("DoPliku", polaczone);
-        putText(polaczone, str.str(), cvPoint(30,30),
+          putText(polaczone, str.str(), cvPoint(30,30),
             FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
+        imshow("DoPliku", polaczone);
+
         tym[2]=cv::Mat::zeros(frame.size(),CV_8UC1);
 
         key = cvWaitKey(10);
@@ -394,7 +398,67 @@ int klawiatura_dopliku(char* sciezka)
 
 int klawiatura_zfilmu(string sciezka)
 {
+    VideoCapture cap2(sciezka);
+    if(!cap2.isOpened())
+    {
+        cout<<"Wystapil problem"<<endl;
+        return -1;
+    }
+    cvNamedWindow("ZFilmu", CV_WINDOW_AUTOSIZE); //Create window
+    Point2i *r,*p;
+    Mat polaczone;
+    Mat tym[3];
+        tym[2]=cv::Mat::zeros(tlo.size(),CV_8UC1);
+    char znak;
+    int licznik;
 
+    while(cap2.read(frame)){
+        std::ostringstream str ;
+        str << "Nacisnieto: " ;
+        split(frame, channel);
+        cvtColor(frame, ycrcb, CV_BGR2YCrCb);
+        inRange(ycrcb, Scalar(ymin, tc, ta), Scalar(ymax, td, tb), reka);
+        reka &= maska;
+        cien = channel[2] + reka;
+        threshold(cien,cien,levelBin,255,1);
+        cien &= maska;
+        r=najwyzej(reka);
+        p=najwyzej(cien);
+
+        line(tym[2], *r, *p, cv::Scalar(255), 3,8,0);
+        tym[0]=reka;
+        tym[1]=cien;
+        merge(tym,3,polaczone);
+        znak = kolKlikniecie(r,p,&(brzegi[0]), &(brzegi[1]), &(brzegi[2]),dist_req);
+         if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
+                if(licznik==0 || licznik>=50)
+                {
+                    str<< znak;
+                }
+                licznik++;
+            }
+            else licznik=0;
+
+          putText(polaczone, str.str(), cvPoint(30,30),
+            FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
+        imshow("ZFilmu", polaczone);
+
+        tym[2]=cv::Mat::zeros(frame.size(),CV_8UC1);
+
+        key = cvWaitKey(10);
+        if (key == 27){
+            cout << "Nacisnieto ESC" << endl;
+            destroyAllWindows();
+            return -1;
+        }
+        if (key == 13) {
+            cout << "Nacisnieto ENTER, konczymy impreze" << endl;//trzeba bedzie to w dzialajacej wersji usunac
+            destroyAllWindows();
+            break;
+        }
+    }
+
+    destroyAllWindows();
     return 0;
 }
 

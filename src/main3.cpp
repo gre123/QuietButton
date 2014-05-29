@@ -253,8 +253,8 @@ int klawiatura_podglad()
         tym[1]=cien;
         merge(tym,3,polaczone);
             //str << "Pozycja palca: (" << (*r).x << "," << (*r).y << ")";
-           znak = kolKlikniecie(r,p,&(brzegi[0]), &(brzegi[1]), &(brzegi[2]),dist_req);
-           //  znak = klawiatura->getKlawisz(*r,*p,dist_req);
+           //znak = kolKlikniecie(r,p,&(brzegi[0]), &(brzegi[1]), &(brzegi[2]),dist_req);
+             znak = klawiatura->getKlawisz(*r,*p,dist_req);
 
            if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
                 if(licznik==0 || licznik>=50)

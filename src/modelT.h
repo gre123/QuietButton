@@ -21,7 +21,7 @@ class modelT
         keyboard *klawiatura;
         INPUT ip;
 
-        Mat frame,frame2,frameGray,result,background,tempImg;
+        Mat frame,frame2,frameGray,result,background,tempImg,dlon,cien;
         modelT();
         virtual ~modelT();
         int ustawRekeT();
@@ -29,6 +29,7 @@ class modelT
         int klawiatura_zfilmu(string sciezka);
         int klawiatura_podgladT();
         int klawiatura_standardT();
+        Mat detekcjaT(Mat frame,char &znak);
 };
 
 #endif // MODELT_H

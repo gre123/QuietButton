@@ -42,6 +42,7 @@ class modelE
         int ustawRekeE();
         int ustawCienE();
         int ustawKlikE();
+        Mat detekcjaE(Mat frame,char &znak);
 
     protected:
         char *nazwaokna;

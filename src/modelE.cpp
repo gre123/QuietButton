@@ -4,12 +4,6 @@ modelE::modelE()
 {
 
    captE1.open(0);
-   ip.type = INPUT_KEYBOARD;   //
-   ip.ki.wScan = 0;            //do symulowania klawiatury
-   ip.ki.time = 0;             //
-   ip.ki.dwExtraInfo = 0;      //
-   ip.ki.dwFlags = 0; // 0 for key press
-
    captE1.set(CV_CAP_PROP_FRAME_WIDTH, 800);
    captE1.set(CV_CAP_PROP_FRAME_HEIGHT, 600);
 
@@ -29,7 +23,27 @@ modelE::~modelE()
     //dtor
 }
 
+Mat modelE::detekcjaE(Mat frame,char &znak)
+{
+        Point2i *r,*p;
+        split(frame, channel);
+        cvtColor(frame, ycrcb, CV_BGR2YCrCb);
+        inRange(ycrcb, Scalar(ymin, tc, ta), Scalar(ymax, td, tb), reka);
+        reka &= maska;
+        cien = channel[2] + reka;
+        threshold(cien,cien,levelBin,255,1);
+        cien &= maska;
+        r=najwyzej(reka);
+        p=najwyzej(cien);
 
+        line(tym[2], *r, *p, cv::Scalar(255), 3,8,0);
+        tym[0]=reka;
+        tym[1]=cien;
+        merge(tym,3,polaczone);
+        znak = klawiaturaE->getKlawisz(*r,*p,dist_req);
+        tym[2]=cv::Mat::zeros(frame.size(),CV_8UC1);
+        return polaczone;
+}
 
 
 int modelE::ustawTloE(){
@@ -85,7 +99,7 @@ int modelE::ustawTloE(){
     klawiaturaE=new keyboard(264,120);
     klawiaturaE->setKeyboard(&brzegi);
     klawiaturaE->translateKeyboardCordsElp(25);
-
+    tym[2]=cv::Mat::zeros(tlo.size(),CV_8UC1);
 
     return 0;
 }

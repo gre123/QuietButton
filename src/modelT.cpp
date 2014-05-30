@@ -8,13 +8,25 @@ modelT::modelT()
     background= findBackGround(capt1,klawiatura,templateImage);
     background.copyTo(tempImg);
     klawiatura->translateKeyboardCords(templateImage.cols);
- //   klawiatura->drawKeyBoard(tempImg);
 
 }
 
 modelT::~modelT()
 {
     //dtor
+}
+
+Mat modelT::detekcjaT(Mat frame,char &znak)
+{
+    cien_palec(frame,background,dlon,cien,a,b,c,d);
+    Point2i *r=najwyzej(dlon);
+    Point2i *p=najwyzej(cien);
+
+    if (r!=0 && p!=0){
+        cv::line(frame, *r, *p, cv::Scalar(255,0,0), 2, CV_AA);
+        znak=klawiatura->getKlawisz(*r,*p,dist_reqT);
+    }
+    return frame;
 }
 
 int modelT::ustawRekeT()
@@ -150,63 +162,7 @@ int modelT::ustawKlikT()
     destroyAllWindows();
     return 0;
 }
-int modelT::klawiatura_podgladT()
-{
-      int threshold_value = 0;
-      int threshold_type = 3;
-      int level=200;
-      int levelBin=30;
-      int levelBin2=30;
 
-      Mat dlon,cien;
-      int const max_value = 255;
-      int const max_type = 4;
-      int const max_BINARY_value = 255;
-      char* mainWindowName = "main window";
-      int matchMethod=4;
-      int optionOfDisplay=0;//0 -zbinaryzowany obraz 1- splot
-      int morphSize=1;
-
-      if (!capt1.isOpened()){
-        cout << "Cannot open the camera" << endl;
-        return -1;
-      }
-
-  /// Create windows
-    namedWindow(mainWindowName, CV_WINDOW_AUTOSIZE);
-
-
-    while(capt1.read(frame)){
-    std::ostringstream str;
-    str << "nacisnieto : " ;
-
-    cien_palec(frame,background,dlon,cien,a,b,c,d);
-    Point2i *r=najwyzej(dlon);
-    Point2i *p=najwyzej(cien);
-
-    if (r!=0 && p!=0){
-        cv::line(frame, *r, *p, cv::Scalar(255,0,0), 2, CV_AA);
-        char znak=klawiatura->getKlawisz(*r,*p,dist_reqT);
-        if (znak!=0){
-            str<<znak;
-            putText(frame, str.str(), cvPoint(30,30),
-            FONT_HERSHEY_COMPLEX, 1, cvScalar(0,200,0), 1, CV_AA);
-        }
-    }
-   imshow(mainWindowName, frame);
-
-    if(waitKey(30) == 27){
-        cout << "esc key is pressed by user" << endl;break;
-    }
-    if(waitKey(30) == 13){
-        cout << "wcisnieto ENTER" << endl;break;
-    }
-
-    }
-
-    destroyWindow(mainWindowName);
-    return 0;
-}
 
 int modelT::klawiatura_standardT()
 {

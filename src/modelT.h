@@ -26,9 +26,6 @@ class modelT
         virtual ~modelT();
         int ustawRekeT();
         int ustawKlikT();
-        int klawiatura_zfilmu(string sciezka);
-        int klawiatura_podgladT();
-        int klawiatura_standardT();
         Mat detekcjaT(Mat frame,char &znak);
 };
 

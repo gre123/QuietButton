@@ -179,11 +179,17 @@ int klawiatura_zfilmu(string sciezka)
 
         if(model=='E'){
             if(bylaKalibracja) wynik=modE.detekcjaE(frame,znak);
-            else return -1;
+            else{
+                    destroyAllWindows();
+                    return -1;
+            }
         }
         else{
                 if(bylaKalibracjaT) wynik=modT.detekcjaT(frame,znak);
-                else return -1;
+                else{
+                    destroyAllWindows();
+                    return -1;
+                }
         }
 
         if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){

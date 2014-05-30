@@ -208,7 +208,7 @@ Point2i *najwyzej(Mat &obr){
     }
     return new Point2i(0,0);
 }
-void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2){
+void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2,int p,int q,int r,int s){
     Mat wodj,ob1,ob2,ob3,w_cien,wbin,w_reka,w_ycbcr,w_gray;
     Mat kanaly[3];
     Mat dlon,cien;
@@ -226,9 +226,9 @@ void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2){
 
     cvtColor(obr,w_ycbcr,CV_RGB2YCrCb);
     split(w_ycbcr,kanaly);
-    inRange(kanaly[0],a,b,ob1);
+    inRange(kanaly[0],p,q,ob1);
    // inRange(kanaly[1],c,d,ob2);
-    inRange(kanaly[2],e,f,ob3);
+    inRange(kanaly[2],r,s,ob3);
 
 
 //imshow("test1", ob2);

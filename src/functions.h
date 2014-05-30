@@ -19,7 +19,7 @@ int findMarker(vector<Point>* markers,int whichMarker);
 void sortMarkers(vector<Point>* markers);
 void sortCircles(vector<Vec3f>* markers);
 Point2i *najwyzej(Mat &obr);
-void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2);
+void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2,int ta,int tb,int tc,int td);
 void odejm(Mat &obr,Mat &tlo,int p,int q);
 Mat shiftFrame(Mat &frame, int horizontalShift, int verticalShift);
 vector<Point> * findKeyboard(Mat &frame,Mat &backgroundFrame,Mat &templateImage);

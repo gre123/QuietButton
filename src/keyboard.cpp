@@ -99,10 +99,12 @@ for (int i=0;i<klawisze->size();i++){
 
 void keyboard::translateKeyboardCordsElp(int markerSize){
 
+std::cout<<"Jestem tu"<<endl;
 float xCof=(markers->at(1).x-markers->at(0).x)/(float)widthReal;
 float yCof=(markers->at(2).y-markers->at(0).y)/(float)heightReal;
 float xCof1=(markers->at(3).x-markers->at(2).x)/(float)widthReal;
 float yCof1=(markers->at(3).y-markers->at(1).y)/(float)heightReal;
+
 
 markerSize*=xCof;
 

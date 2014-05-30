@@ -1,9 +1,9 @@
 //#include <iostream>
 #include "modelT.h"
+#include "modelE.h"
 #define WINVER 0x0500   //
 #include <windows.h>    //do klawiatury
 #include <fstream>
-#include <conio.h>
 #include <stdio.h>
 using namespace std;
 
@@ -29,6 +29,7 @@ char nazwaokna3[] = "Ustawianie parametrow wykrywania cienia";
 char nazwaokna4[] = "Podglad wynikow";
 char nazwaokna5[] = "Model Klawiatury";
 char key,option;
+
 char model='E';
 Mat frame, channel[3], tlo,maska,ycrcb, reka,cien;
 VideoCapture capture(0);
@@ -36,8 +37,9 @@ vector<Point> brzegi;
 INPUT ip;
 std::ostringstream str ;
 bool bylaKalibracja=false;
+bool bylaKalibracjaT=false;
 char sciezk[50];
-modelT modT;
+
 keyboard * klawiatura;
 
 int ustawTlo(){
@@ -224,10 +226,10 @@ int klawiatura_podglad()
 
     //// model z  klawiatura
 //    cvNamedWindow(nazwaokna5, CV_WINDOW_AUTOSIZE); //Create window
-//    klawiatura->setKeyboard(&brzegi);
-//    tlo.copyTo(tempImg);
-//    klawiatura->translateKeyboardCordsElp(25);
-//    klawiatura->drawKeyBoard(tempImg);
+    klawiatura->setKeyboard(&brzegi);
+ //   tlo.copyTo(tempImg);
+    klawiatura->translateKeyboardCordsElp(25);
+  //  klawiatura->drawKeyBoard(tempImg);
 //    imshow(nazwaokna5,tempImg);
 //    ////
 //cout << "echodze do while'a 4" << endl;
@@ -463,6 +465,8 @@ int klawiatura_zfilmu(string sciezka)
 }
 
 int main(){
+    modelT modT;
+    modelE modE;
                       //
     ip.type = INPUT_KEYBOARD;   //
     ip.ki.wScan = 0;            //do symulowania klawiatury
@@ -480,6 +484,7 @@ int main(){
     klawiatura=new keyboard(264,120);
 ///Chyba wszystko ustawione, teraz koncowe wyswietlanie
 
+///Menu
     do
     {
         cout<<string(22, '\n');
@@ -497,6 +502,8 @@ int main(){
         }
 
         if(model=='T'){
+        cout<<"Kalibracja (k)"<<endl;
+        cout<<"Odpal klawiature jako standard. (s)"<<endl;
         cout<<"Odpal klawiature - podglad wyniku (w)"<<endl;
         cout<<"Zmiana modelu klawiatury (m)"<<endl;
         cout<<"Wczytaj znaki z filmu (f)"<<endl;
@@ -508,28 +515,42 @@ int main(){
         {
             case 'k':
             {
-                ///czesc do wykrywania pozycji klawiatury
-                if(ustawTlo()==-1) return 0;
-                ///teraz czesc do ustawiania parametrow modelu koloru skory
-                //destroyAllWindows();
-                if(ustawReke()==-1) return 0;
-                ///Teraz czesc do ustawiania parametrow wykrywania cienia
-                if(ustawCien()==-1) return 0;
+                if(model=='E'){
+                    ///czesc do wykrywania pozycji klawiatury
+                    if(ustawTlo()==-1) return 0;
+                    ///teraz czesc do ustawiania parametrow modelu koloru skory
+                    //destroyAllWindows();
+                    if(ustawReke()==-1) return 0;
+                    ///Teraz czesc do ustawiania parametrow wykrywania cienia
+                    if(ustawCien()==-1) return 0;
 
-                if(ustawKlik()==-1) return 0;
-                bylaKalibracja=true;
+                    if(ustawKlik()==-1) return 0;
+                    bylaKalibracja=true;
+                }
+                if(model=='T'){
+                    if(modT.ustawRekeT()==-1) return 0;
+                    if(modT.ustawKlikT()==-1) return 0;
+                    bylaKalibracjaT=true;
+                }
                 break;
             }
             case 's':
             {
-                if(!bylaKalibracja || klawiatura_system()==-1 ) return 0;
+                if(model=='E') {
+                    if(!bylaKalibracja || klawiatura_system()==-1 ) return 0;
+                }
+                if(model=='T'){
+                    if(!bylaKalibracjaT || modT.klawiatura_standardT()==-1) return 0;
+                }
                 break;
             }
             case 'w':
             {
                 if(model=='E') if(!bylaKalibracja || klawiatura_podglad()==-1) return 0;
-                if(model=='T') if(modT.klawiatura_podglad(capture)==-1) return 0;
-                    break;
+                if(model=='T'){
+                        if(!bylaKalibracjaT || modT.klawiatura_podgladT()==-1) return 0;
+                }
+                break;
             }
             case 'p':
             {

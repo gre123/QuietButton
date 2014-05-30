@@ -5,23 +5,30 @@
 
 #define WINVER 0x0500   //
 #include <windows.h>    //do klawiatury
-
+#include <conio.h>
 
 class modelT
 {
     public:
         int a=115;
         int b=255;
-        int c=100;
-        int d=120;
-        int e=146;
-        int f=220;
+        int e=100;
+        int f=120;
+        int c=146;
+        int d=220;
+        VideoCapture capt1;
+        int dist_reqT=35;
+        keyboard *klawiatura;
+        INPUT ip;
 
-        Mat frame,frame2,frameGray,result,background,tempImg,dlon,cien;
+        Mat frame,frame2,frameGray,result,background,tempImg;
         modelT();
         virtual ~modelT();
+        int ustawRekeT();
+        int ustawKlikT();
         int klawiatura_zfilmu(string sciezka);
-        int klawiatura_podglad(VideoCapture capture);
+        int klawiatura_podgladT();
+        int klawiatura_standardT();
 };
 
 #endif // MODELT_H

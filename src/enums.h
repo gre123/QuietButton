@@ -1,8 +1,11 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
+enum keyboardModel{
+    KB_COLOR=1, KB_WHITE
+   };
 
-enum Direction{
-    ShiftUp=1, ShiftRight, ShiftDown, ShiftLeft
+enum inputOption{
+    OP_PREVIEW=1, OP_SYSTEM,OP_FILE
    };
 #endif

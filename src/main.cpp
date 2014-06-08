@@ -1,142 +1,320 @@
-//
-//////#include <iostream>
-//#include "functions.h"
-//
-//#define WINVER 0x0500   //
-//#include <windows.h>    //do klawiatury
-//
-////using namespace std;
-//int a=115;
-//int b=255;
-//int c=100;
-//int d=120;
-//int e=146;
-//int f=220;
-//
-//
-//int main()
-//{
-//    INPUT ip;                   //
-//    ip.type = INPUT_KEYBOARD;   //
-//    ip.ki.wScan = 0;            //do symulowania klawiatury
-//    ip.ki.time = 0;             //
-//    ip.ki.dwExtraInfo = 0;      //
-//    ip.ki.dwFlags = 0; // 0 for key press
-//
-//    int threshold_value = 0;
-//    int threshold_type = 3;
-//    int level=200;
-//    int levelBin=30;
-//    int levelBin2=30;
-//
-//    int const max_value = 255;
-//    int const max_type = 4;
-//    int const max_BINARY_value = 255;
-//    char* mainWindowName = "main window";
-//    char* shadow = "cieñ";
-//    char* hand = "r¹sia";
-//    char* resultWindowName = "result window";
-//    char* backgroundWindowName = "background window";
-//    int matchMethod=4;
-//    int optionOfDisplay=0;//0 -zbinaryzowany obraz 1- splot
-//        int morphSize=1;
-//    VideoCapture capture("video/v13.avi"); // open the video file for reading
-//    Mat templateImage = imread("video/t4.bmp", 0 );
-//    //VideoCapture capture(0); // open the video camera no. 0
-//    if (!capture.isOpened()){
-//         cout << "Cannot open the video file" << endl;
-//         return -1;
-//    }
-//    char* trackbar_type = "level";
-//    char* trackbar_value = "Value";
-//    char* templete = "Value";
-//
-//  /// Create windows
-//    namedWindow(mainWindowName, CV_WINDOW_AUTOSIZE);
-//    namedWindow(resultWindowName, CV_WINDOW_AUTOSIZE);
-//    namedWindow(backgroundWindowName, CV_WINDOW_AUTOSIZE);
-//    namedWindow(hand, CV_WINDOW_AUTOSIZE);
-//    namedWindow(shadow, CV_WINDOW_AUTOSIZE);
-//    //namedWindow("test", CV_WINDOW_AUTOSIZE);
-//   // namedWindow("test1", CV_WINDOW_AUTOSIZE);
-//   // namedWindow("test2", CV_WINDOW_AUTOSIZE);
-//  /// Create Trackbar
-//
-//    createTrackbar( trackbar_type, resultWindowName, &level, 255, 0 );
-//    createTrackbar( "level1", mainWindowName, &levelBin, 255, 0 );
-//    createTrackbar( "level2", mainWindowName, &levelBin2, 255, 0 );
-//    createTrackbar( "typ spolotu", resultWindowName, &matchMethod, 4, 0 );
-//    createTrackbar( "wielksoc elementu", mainWindowName, &morphSize, 20, 0 );
-//    createTrackbar( "wielksoc elementu", mainWindowName, &morphSize, 20, 0 );
-//    /*
-//    createTrackbar( "a ", "test", &a, 255, 0 );
-//    createTrackbar( "b ", "test", &b, 255, 0 );
-//    createTrackbar( "c ", "test1", &c, 255, 0 );
-//    createTrackbar( "d ", "test1", &d, 255, 0 );
-//    createTrackbar( "e ", "test2", &e, 255, 0 );
-//    createTrackbar( "f ", "test2", &f, 255, 0 );*/
-//Mat frame,frame2;
-//Mat frameGray;
-//Mat result;
-//Mat background;//=imread("video/v5.avi", 0 );
-//Mat tempImg;
-//Mat dlon,cien;
-////Mat element = getStructuringElement( MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ), Point( morphSize, morphSize ) );
-//keyboard * klawiatura=new keyboard(196,126);
-//
-//background= findBackGround(capture,klawiatura,templateImage);
-//background.copyTo(tempImg);
-//klawiatura->translateKeyboardCords();
-//klawiatura->drawKeyBoard(tempImg,templateImage);
-//imshow(resultWindowName, tempImg);
-//imshow(backgroundWindowName, background);
-//
-//while(capture.read(frame)){
-//
-// //   odejm(frame,background,levelBin,levelBin2);
-//   cien_palec(frame,background,dlon,cien);
-//   Point2i *r=najwyzej(dlon);
-//   Point2i *p=najwyzej(cien);
-//
-//  if (r!=0 && p!=0){
-//   //cout<<r->x<<";"<<r->y<<";";
-//   //cout<<p->x<<";"<<p->y<<endl;
-//   cv::line(frame, *r, *p, cv::Scalar(255,0,0), 2, CV_AA);
-//   char znak=klawiatura->getKlawisz(*r,*p);
-//   if (znak!=0){
-//        ip.ki.wVk = VkKeyScan(znak);        //wysyla przerwanie klawiatury
-//        SendInput(1, &ip, sizeof(INPUT));   //nie dziala przytrzymanie klawisza
-//    cout<<znak<<endl;
-//   }
-//
-//  }else{
-//  //cout<<0<<";"<<0<<";";
-//  // cout<<480<<";"<<0<<endl;
-//  }
-//
-//   // kontury(frame2,150);
-//   // kontury(frame,150);
-//   // morphSize=4;
-//    //element = getStructuringElement( MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ), Point( morphSize, morphSize ) );
-//
-//  /// Apply the specified morphology operation
-//    //morphologyEx( frame, frame, 0, element );
-//    //morphSize*=2;
-//   // element = getStructuringElement( MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ), Point( morphSize, morphSize ) );
-//   // morphologyEx( frame, frame, 1, element );
-//
-//   imshow(mainWindowName, frame);
-//   imshow(hand, dlon);
-//   imshow(shadow, cien);
-//
-//    if(waitKey(30) == 27){
-//        cout << "esc key is pressed by user" << endl;break;
-//    }
-//}
-//    destroyWindow(mainWindowName);
-//    destroyWindow(resultWindowName);
-//    destroyWindow(hand);
-//    destroyWindow(shadow);
-//    return 0;
-//}
-//
+//#include <iostream>
+#include "modelT.h"
+#include "modelE.h"
+#define WINVER 0x0500   //
+#include <windows.h>    //do klawiatury
+#include <fstream>
+#include <stdio.h>
+
+using namespace std;
+
+int a=115;
+int b=255;
+int c=100;
+int d=120;
+int e=146;
+int f=220;
+
+
+char nazwaokna4[] = "Podglad wynikow";
+char key,option;
+int model=KB_COLOR;
+Mat frame;
+VideoCapture capture(0);
+INPUT ip;
+bool bylaKalibracja=false;
+bool bylaKalibracjaT=false;
+char sciezk[50];
+modelE md_kolorowy;
+modelT md_bialy;
+
+int klawiatura_dopliku(char* sciezka){
+    int licznik =0;
+    fstream pl(sciezka,ios::out);
+    if(!pl.good()){ return -1;}
+    cvNamedWindow("DoPliku", CV_WINDOW_AUTOSIZE); //Create window
+    Mat wynik;
+    char znak;
+    while(capture.read(frame)){
+        std::ostringstream str ;
+        str << "Nacisnieto: " ;
+        if(model==KB_COLOR){
+            if(bylaKalibracja) wynik=md_kolorowy.detekcja(frame,znak);
+            else return -1;
+        }
+        else{
+            if(bylaKalibracjaT) wynik=md_bialy.detekcja(frame,znak);
+            else return -1;
+        }
+        if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
+                if(licznik==0 || licznik>=50)
+                {
+                    str<< znak;
+                    pl<<znak;
+                }
+                licznik++;
+            }
+            else licznik=0;
+
+            putText(wynik, str.str(), cvPoint(30,30),
+            FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
+            imshow("DoPliku", wynik);
+        key = cvWaitKey(10);
+        if (key == 27){
+            cout << "Nacisnieto ESC" << endl;
+            destroyAllWindows();
+            pl.close();
+            return -1;
+        }
+        if (key == 13) {
+            cout << "Nacisnieto ENTER, konczymy impreze" << endl;//trzeba bedzie to w dzialajacej wersji usunac
+            destroyAllWindows();
+            pl.close();
+            break;
+        }
+    }
+    return 0;
+}
+
+int readFromCamera(int option,char* sciezka="video/out.txt"){
+bool correctChar=false;
+    Mat wynik;
+    if (option==OP_PREVIEW){
+        cvNamedWindow(nazwaokna4, CV_WINDOW_AUTOSIZE); //Create window
+        cout<<"Aby zakoÅ„czyc : enter na okienku"<<endl;
+    }else if (option==OP_SYSTEM){
+        cout<<"Klawiatura na standard. aby wyjsc wcisnij enter"<<endl;
+    }else if (option==OP_FILE){
+        fstream pl(sciezka,ios::out);
+        if(!pl.good()){ return -1;}
+        cvNamedWindow(nazwaokna4, CV_WINDOW_AUTOSIZE); //Create window
+        cout<<"Zapis do pliku"<<endl;
+    }
+
+    int licznik=0;
+    char znak;
+
+
+    while(capture.read(frame)){
+            correctChar=false;
+        std::ostringstream str ;
+        str << "Nacisnieto: " ;
+
+        if(model==KB_COLOR){
+                if(bylaKalibracja) wynik=md_kolorowy.detekcja(frame,znak);
+                else return -1;
+        }
+        else{
+                if(bylaKalibracjaT) wynik=md_bialy.detekcja(frame,znak);
+                else return -1;
+        }
+
+        if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
+        if(licznik==0 || licznik>=50)
+        {
+            str<<znak;
+            correctChar=true;
+        }
+        licznik++;
+        }
+        else licznik=0;
+
+        if (option==OP_PREVIEW){
+            putText(wynik, str.str(), cvPoint(30,30),
+            FONT_HERSHEY_COMPLEX, 1, cvScalar(255,0,0), 1, CV_AA);
+            imshow(nazwaokna4, wynik);
+        }else if (option==OP_SYSTEM && correctChar){
+            ip.ki.wVk = VkKeyScan(znak);        //wysyla przerwanie klawiatury
+            SendInput(1, &ip, sizeof(INPUT));   //nie dziala przytrzymanie klawisza
+        }else if (option==OP_FILE){
+            putText(wynik, str.str(), cvPoint(30,30),
+            FONT_HERSHEY_COMPLEX, 1, cvScalar(255,10,10), 1, CV_AA);
+            imshow(nazwaokna4, wynik);
+        }
+
+        key = cvWaitKey(15);
+        if (key == 27){
+            cout << "Nacisnieto ESC" << endl;
+            destroyAllWindows();
+            return -1;
+        }
+        if (key == 13) {
+            cout << "Nacisnieto ENTER, konczymy impreze" << endl;//trzeba bedzie to w dzialajacej wersji usunac
+            destroyAllWindows();
+            break;
+        }
+    }
+    return 0;
+
+}
+
+
+int klawiatura_zfilmu(string sciezka){
+    VideoCapture cap2(sciezka);
+    if(!cap2.isOpened())
+    {
+        cout<<"Wystapil problem"<<endl;
+        return -1;
+    }
+    cvNamedWindow("ZFilmu", CV_WINDOW_AUTOSIZE); //Create window
+    Mat wynik;
+    char znak;
+    int licznik;
+
+    while(cap2.read(frame)){
+        std::ostringstream str ;
+        str << "Nacisnieto: " ;
+
+        if(model==KB_COLOR){
+            if(bylaKalibracja) wynik=md_kolorowy.detekcja(frame,znak);
+            else{
+                    destroyAllWindows();
+                    return -1;
+            }
+        }
+        else{
+                if(bylaKalibracjaT) wynik=md_bialy.detekcja(frame,znak);
+                else{
+                    destroyAllWindows();
+                    return -1;
+                }
+        }
+
+        if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
+                if(licznik==0 || licznik>=50)
+                {
+                    str<< znak;
+                }
+                licznik++;
+            }
+            else licznik=0;
+
+          putText(wynik, str.str(), cvPoint(30,30),
+            FONT_HERSHEY_COMPLEX, 1, cvScalar(200,200,250), 1, CV_AA);
+        imshow("ZFilmu", wynik);
+        key = cvWaitKey(10);
+        if (key == 27){
+            cout << "Nacisnieto ESC" << endl;
+            destroyAllWindows();
+            return -1;
+        }
+        if (key == 13) {
+            cout << "Nacisnieto ENTER, konczymy impreze" << endl;//trzeba bedzie to w dzialajacej wersji usunac
+            destroyAllWindows();
+            break;
+        }
+    }
+
+    destroyAllWindows();
+    return 0;
+}
+
+int main(){
+
+   ip.type = INPUT_KEYBOARD;   //
+   ip.ki.wScan = 0;            //do symulowania klawiatury
+   ip.ki.time = 0;             //
+   ip.ki.dwExtraInfo = 0;      //
+   ip.ki.dwFlags = 0; // 0 for key press
+   if (!capture.isOpened()){cout << "Nie znalazlem kamery!" << endl;return -1;}
+    capture.set(CV_CAP_PROP_FRAME_WIDTH, 800);
+    capture.set(CV_CAP_PROP_FRAME_HEIGHT, 600);
+
+///Menu
+    do{
+        //cout<<string(22, '\n');
+        system("cls");
+        cout<<"KLAWIATURA <<<<<<<<<<<<<"<<endl;
+
+        cout<<"Model : "<<model<<endl<<endl;
+
+        if(model==KB_COLOR){
+        cout<<"Kalibracja (k)"<<endl;
+        cout<<"Odpal klawiature jako standard. (s)"<<endl;
+        cout<<"Odpal klawiature - podglad wyniku (w)"<<endl;
+        cout<<"Odpal klawiature i zapisuj do pliku (p)"<<endl;
+        cout<<"Zmiana modelu klawiatury (m)"<<endl;
+        cout<<"Wczytaj znaki z filmu (f)"<<endl;
+        cout<<"Wyjscie (q)"<<endl;
+        }
+        else if(model==KB_WHITE){
+        cout<<"Kalibracja (k)"<<endl;
+        cout<<"Odpal klawiature jako standard. (s)"<<endl;
+        cout<<"Odpal klawiature - podglad wyniku (w)"<<endl;
+        cout<<"Zmiana modelu klawiatury (m)"<<endl;
+        cout<<"Wczytaj znaki z filmu (f)"<<endl;
+        cout<<"Wyjscie (q)"<<endl;
+        }
+
+        cin>>option;
+        switch(option)
+        {
+            case 'k':
+            {
+                if(model==KB_COLOR){
+                    ///czesc do wykrywania pozycji klawiatury
+                    if(md_kolorowy.ustawTlo()==-1) return 0;
+                    ///teraz czesc do ustawiania parametrow modelu koloru skory
+                    //destroyAllWindows();
+                    if(md_kolorowy.ustawReke()==-1) return 0;
+                    ///Teraz czesc do ustawiania parametrow wykrywania cienia
+                    if(md_kolorowy.ustawCien()==-1) return 0;
+
+                    if(md_kolorowy.ustawKlik()==-1) return 0;
+                    bylaKalibracja=true;
+                }
+                else if(model==KB_WHITE){
+                    if(md_bialy.ustawReke()==-1) return 0;
+                    if(md_bialy.ustawKlik()==-1) return 0;
+                    bylaKalibracjaT=true;
+                }
+                break;
+            }
+            case 's':
+            {
+                if(readFromCamera(OP_SYSTEM)==-1) {
+                    cout<<"WystÄ…pil problem SYSTEM"<<endl;
+                    return 0;
+                }
+                break;
+            }
+            case 'w':
+            {
+                if(readFromCamera(OP_PREVIEW)==-1) {
+                    cout<<"WystÄ…pil problem PODGLAD"<<endl;
+                    return 0;
+                }
+                break;
+            }
+            case 'p':
+            {
+                cout<<"Podaj bezwzgledna sciezke do zapisu"<<endl;
+                scanf("%s",sciezk);
+                if(klawiatura_dopliku(sciezk)==-1){
+                 cout<<"Nastapil problem z ta opcja"<<endl;
+                 return 0;
+                }
+                break;
+            }
+            case 'f':
+            {
+                cout<<"Podaj bezwzgledna sciezke do filmu"<<endl;
+                scanf("%s",sciezk);
+                if(klawiatura_zfilmu(sciezk)==-1) {
+                    cout<<"Nastapil blad w tej opcji"<<endl;
+                }
+                break;
+            }
+            case 'm':
+            {
+                if(model==KB_COLOR) model=KB_WHITE;
+                else model=KB_COLOR;
+                break;
+            }
+        }
+    }while(option!='q');
+
+    destroyAllWindows();
+    cout << "Wychodze" << endl;
+    return 0;
+}

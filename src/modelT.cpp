@@ -3,12 +3,12 @@
 modelT::modelT()
 {
     capt1.open(0);
-    Mat templateImage = imread("video/t4.bmp", 0 );
-    klawiatura=new keyboard(196,126);
+    Mat templateImage = imread("video/temp8x6.png", 0 );
+    klawiatura=new keyboard(254,148,KB_WHITE);
     background= findBackGround(capt1,klawiatura,templateImage);
     background.copyTo(tempImg);
-    klawiatura->translateKeyboardCords(templateImage.cols);
-
+    klawiatura->translateKeyboardCords(17);
+    klawiatura->drawKeyBoard(tempImg);
 }
 
 modelT::~modelT()
@@ -16,11 +16,11 @@ modelT::~modelT()
     //dtor
 }
 
-Mat modelT::detekcjaT(Mat frame,char &znak)
+Mat modelT::detekcja(Mat frame,char &znak)
 {
-    cien_palec(frame,background,dlon,cien,a,b,c,d);
-    Point2i *r=najwyzej(dlon);
-    Point2i *p=najwyzej(cien);
+    cien_palec(frame,background,dlon,cien,a,b,c,d,levelThresh);
+    Point2i *r=bigestPeakDetection(&dlon);
+    Point2i *p=bigestPeakDetection(&cien);
 
     if (r!=0 && p!=0){
         cv::line(frame, *r, *p, cv::Scalar(255,0,0), 2, CV_AA);
@@ -29,26 +29,29 @@ Mat modelT::detekcjaT(Mat frame,char &znak)
     return frame;
 }
 
-int modelT::ustawRekeT()
+int modelT::ustawReke()
 {
-
+    if(!capt1.isOpened()){ return -1;}
     char* mainWindowName = "Ustaw reke";
-    if(!capt1.isOpened()) return -1;
+    char* cienWindowName = "Ustaw cien";
+    char* klawWindowName = "Wykryta klawiatura";
+
     cvNamedWindow(mainWindowName, CV_WINDOW_AUTOSIZE); //Create window
-
+    cvNamedWindow(cienWindowName, CV_WINDOW_AUTOSIZE);
+    cvNamedWindow(klawWindowName, CV_WINDOW_AUTOSIZE);
+    imshow(klawWindowName,tempImg);
     Mat dlon,cien;
-
-
 
     createTrackbar( "Ta (Ta<Cb)", mainWindowName, &a, 255, 0 );
     createTrackbar( "Tb (Cb<Tb)", mainWindowName, &b, 255, 0 );
-    createTrackbar( "Tc (Tc<Cb)", mainWindowName, &c, 255, 0 );
-    createTrackbar( "Td (Cb<Td)", mainWindowName, &d, 255, 0 );
-
+    createTrackbar( "Tc (Tc<Cr)", mainWindowName, &c, 255, 0 );
+    createTrackbar( "Td (Cr<Td)", mainWindowName, &d, 255, 0 );
+    createTrackbar( "level", cienWindowName, &levelThresh, 255, 0 );
     while(capt1.read(frame)){
 
-        cien_palec(frame,background,dlon,cien,a,b,c,d);
+        cien_palec(frame,background,dlon,cien,a,b,c,d,levelThresh);
         imshow(mainWindowName, dlon);
+        imshow(cienWindowName, cien);
 
         if(waitKey(30) == 27){
             cout << "esc key is pressed by user" << endl;break;
@@ -63,7 +66,7 @@ int modelT::ustawRekeT()
     return 0;
 }
 
-int modelT::ustawKlikT()
+int modelT::ustawKlik()
 {
     char* mainWindowName = "Ustaw klik";
     char key;
@@ -72,11 +75,11 @@ int modelT::ustawKlikT()
     Mat dlon,cien;
 
     while(capt1.read(frame)){
-    cien_palec(frame,background,dlon,cien,a,b,c,d);
+    cien_palec(frame,background,dlon,cien,a,b,c,d,levelThresh);
     imshow(mainWindowName, dlon);
 
-    Point2i *r=najwyzej(dlon);
-    Point2i *p=najwyzej(cien);
+    Point2i *r=bigestPeakDetection(&dlon);
+    Point2i *p=bigestPeakDetection(&cien);
 
     if (r!=0 && p!=0){
         cv::line(frame, *r, *p, cv::Scalar(255,0,0), 2, CV_AA);

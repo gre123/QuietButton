@@ -12,7 +12,7 @@ class modelE
     public:
         VideoCapture captE1;
         INPUT ip;
-        keyboard *klawiaturaE;
+        keyboard *klawiatura;
         vector<Vec3f> circles;
         vector<Point> brzegi;
         Mat maska,reka,frame,tlo,cien,polaczone,ycrcb;
@@ -31,18 +31,18 @@ class modelE
         int tc=110;
         int td=240;
         int ymin=0;
-        int ymax=140;
+        int ymax=255;
         int levelBin=10;
         int dist_req=35;
         char key;
 
         modelE();
         virtual ~modelE();
-        int ustawTloE();
-        int ustawRekeE();
-        int ustawCienE();
-        int ustawKlikE();
-        Mat detekcjaE(Mat frame,char &znak);
+        int ustawTlo();
+        int ustawReke();
+        int ustawCien();
+        int ustawKlik();
+        Mat detekcja(Mat frame,char &znak);
 
     protected:
         char *nazwaokna;

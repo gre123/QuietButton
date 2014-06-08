@@ -9,13 +9,12 @@ extern int f;
 /**
  * Rotate an image
  */
-void rotate(Mat& src, double angle, Mat& dst){
+void rotate(Mat& src, double angle, Mat& dst){//obr
     int len = std::max(src.cols, src.rows);
     cv::Point2f pt(len/2., len/2.);
     cv::Mat r = cv::getRotationMatrix2D(pt, angle, 1.0);
     cv::warpAffine(src, dst, r, cv::Size(len, len));
 }
-
 /**
  * @function MatchingMethod
  * @brief Trackbar callback
@@ -66,35 +65,6 @@ float pixValue;
   }
   return markers;
 }
-int findMarker(vector<Point>* markers,int whichMarker){
-return 0;
-}
-void levelOutImage(vector<Point>* markers,Mat &sourceImage){
-static float angle=0;
-
-static int shiftHorizontal;
-static int shiftVertical;
-
-if (markers->size()>=3){
-
-int rightMarker=findMarker( markers, 2);
-int leftMarker=findMarker( markers, 4);
-int a=markers->at(rightMarker).y-markers->at(leftMarker).y;
-int b=markers->at(rightMarker).x-markers->at(leftMarker).x;
-shiftHorizontal=sourceImage.cols/2-(markers->at(rightMarker).x+markers->at(leftMarker).x)/2+26;
-shiftVertical=sourceImage.rows/2-(markers->at(rightMarker).y+markers->at(leftMarker).y)/2+26;
-
-sourceImage=shiftFrame(sourceImage, shiftHorizontal,shiftVertical);
-
-angle=(atan2 (a,b)* 180 / 3.14);
-rotate(sourceImage,angle , sourceImage);
-}else{
-rotate(sourceImage,angle , sourceImage);
-sourceImage=shiftFrame(sourceImage, shiftHorizontal,shiftVertical );
-}
-
-}
-
 void sortMarkers(vector<Point>* markers){
 vector<Point>* leftMarkers= new vector<Point>();
 vector<Point>* rightMarkers= new vector<Point>();
@@ -145,7 +115,6 @@ vector<Point>* rightMarkers= new vector<Point>();
     }
     ///
 }
-///kopia sortMarkers, bo chcialem zrozumiec ta funkcje
 void sortCircles(vector<Vec3f>* markers){
 vector<Vec3f>* leftMarkers= new vector<Vec3f>();
 vector<Vec3f>* rightMarkers= new vector<Vec3f>();
@@ -191,16 +160,12 @@ vector<Vec3f>* rightMarkers= new vector<Vec3f>();
        cout<< markers->at(i)[0]<<" - "<<markers->at(i)[1]<<endl;
     }
 }
-Point2i *najwyzej(Mat &obr){
+Point2i *peakDetection(Mat &obr){
     Mat pom;
     RNG rng(12345);
-    for(int j=0;j<obr.rows;j++)
-    {
-        for(int i=0;i<obr.cols;i++)
-        {
-            if((int)obr.at<uchar>(j,i)==255)
-            {
-             //   cout<<j<<" "<<i<<" "<<" "<<(int)obr.at<uchar>(j,i)<<endl;
+    for(int j=0;j<obr.rows;j++){
+        for(int i=0;i<obr.cols;i++){
+            if((int)obr.at<uchar>(j,i)==255){
                 circle(obr,Point2i(i,j),4,Scalar( rng.uniform(120, 255), rng.uniform(0,255), rng.uniform(0,255) ),-1,8,0);
                 return  new Point2i(i,j);
             }
@@ -208,62 +173,35 @@ Point2i *najwyzej(Mat &obr){
     }
     return new Point2i(0,0);
 }
-void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2,int p,int q,int r,int s){
-    Mat wodj,ob1,ob2,ob3,w_cien,wbin,w_reka,w_ycbcr,w_gray;
+void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2,int Cb1,int Cb2,int Cr1,int Cr2,int thresLevel){
+    Mat difference,CbInRange,CrInRange,CbAndCR,binaryDifference,w_ycbcr,w_gray;
     Mat kanaly[3];
     Mat dlon,cien;
-    int morphSize=1;
+    int morphSize=2;
     Mat element = getStructuringElement(  MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ),Point( morphSize,morphSize ) );
 
-    absdiff(tlo,obr,wodj);
-    cvtColor(wodj,w_gray,CV_RGB2GRAY);
-    threshold(w_gray,wbin,30,255,THRESH_BINARY);
+    absdiff(tlo,obr,difference);
+    cvtColor(difference,w_gray,CV_RGB2GRAY);
+    threshold(w_gray,binaryDifference,thresLevel,255,THRESH_BINARY);
 
-    erode(wbin,wbin,element);
-    //morphSize=5;
-    //element = getStructuringElement(  MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ),Point( morphSize,morphSize ) );
-    //dilate(wbin,wbin,element);
+    erode(binaryDifference,binaryDifference,element);
 
     cvtColor(obr,w_ycbcr,CV_RGB2YCrCb);
     split(w_ycbcr,kanaly);
-    inRange(kanaly[0],p,q,ob1);
-   // inRange(kanaly[1],c,d,ob2);
-    inRange(kanaly[2],r,s,ob3);
+    inRange(kanaly[1],Cb1,Cb2,CbInRange);
+    inRange(kanaly[2],Cr1,Cb2,CrInRange);
 
+    bitwise_and(CbInRange,CrInRange,CbAndCR);
 
-//imshow("test1", ob2);
-//imshow("test2", ob3);
-//bitwise_or(ob3,ob2,dlon);
-    //bitwise_and(dlon,wbin,dlon);
-    //dilate(dlon,dlon,element);
-    ob3.copyTo(dlon);
-    dlon.copyTo(wynik);
-//imshow("test", dlon);
-    //cvtColor(wodj,w_gray,CV_RGB2GRAY);
-    //threshold(w_gray,wbin,30,255,THRESH_BINARY);
-   // bitwise_not(ob1,ob1);
-    //imshow("test", ob1);
-   // imshow("test2", wbin);
-    absdiff(ob1,wbin,cien);
-    bitwise_not(ob3,ob3);
-    bitwise_and(ob3,wbin,dlon);
-    morphSize=3;
-    element = getStructuringElement(  MORPH_ELLIPSE, Size( 2*morphSize + 1, 2*morphSize+1 ),Point( morphSize,morphSize ) );
-
+    CbAndCR.copyTo(dlon);
     erode(dlon,dlon,element);
-   // bitwise_and(wbin,wbin,dlon);
-    dlon.copyTo(wynik2);
-}
+    dlon.copyTo(wynik);
 
-void odejm(Mat &obr,Mat &tlo,int p, int q){
-    Mat wodj;
-    absdiff(tlo,obr,wodj);
-    cvtColor(wodj,wodj,CV_RGB2GRAY);
-    threshold(wodj,wodj,p,255,THRESH_BINARY);
-    wodj.copyTo(obr);
+    absdiff(binaryDifference,CbAndCR,cien);
+    dilate(cien,cien,element);
+    cien.copyTo(wynik2);
 }
-
-cv::Mat shiftFrame(Mat &frame, int horizontalShift, int verticalShift){
+cv::Mat shiftFrame(Mat &frame, int horizontalShift, int verticalShift){//obecnie nieuzywana
     //create a same sized temporary Mat with all the pixels flagged as invalid (-1)
     cv::Mat temp = cv::Mat::zeros(frame.size(), frame.type());
     int startHorizontal=0;
@@ -302,8 +240,6 @@ cv::Mat shiftFrame(Mat &frame, int horizontalShift, int verticalShift){
 
     return temp;
 }
-
-
 vector<Point> * findKeyboard(Mat &frame,Mat &backgroundFrame,Mat &templateImage){
   Mat frameGray;
   Mat result;
@@ -318,7 +254,6 @@ Mat findBackGround(VideoCapture &capture,keyboard *klawiatura,Mat &templateImage
 Mat backgroundFrame;
 Mat frame;
 
-
 while(capture.read(frame)){
     Mat result;
     vector<Point> *markers;
@@ -328,13 +263,10 @@ while(capture.read(frame)){
         sortMarkers(markers);
         klawiatura->setKeyboard(markers);
         return backgroundFrame;
-      //  break;
     }
 }
 return backgroundFrame;
 }
-
-
 ///ma znaleüc tlo i 4 kolka
 vector<Vec3f> tloznaczniki(VideoCapture &capture,Mat *tlo){
 	Mat channel[3];
@@ -352,7 +284,6 @@ vector<Vec3f> tloznaczniki(VideoCapture &capture,Mat *tlo){
 	*tlo=frame;
 	return circles;
 }
-
 ///(x,y,promien) -> (x,y)
 vector<Point> vec3fToPoint(vector<Vec3f> vec){
     int vector_size = vec.size();
@@ -394,7 +325,7 @@ char kolKlikniecie(Point2i *r, Point2i *c, Point *lg, Point *pg, Point *ld,int d
             case 2:
                 return 'w';
             case 3:
-                return 'e';
+                return 't';
             case 4:
                 return 'r';
             case 5:
@@ -504,7 +435,7 @@ char kolKlikniecie(Point2i *r, Point2i *c, Point *lg, Point *pg, Point *ld,int d
     }
 return 0;
 }
-Point* najlepiej(Mat *obr){
+Point* bigestPeakDetection(Mat *obr){
     Mat pom;
     (*obr).copyTo(pom);
     int largest_area=0;
@@ -520,6 +451,7 @@ Point* najlepiej(Mat *obr){
             //bounding_rect=boundingRect(contours[i]); // Find the bounding rectangle for biggest contour
         }
     }
+    if (largest_area<100){return new Point2i(0,0);}
     //czyli mam contours[largest_contour_index] - kontur palca, teraz najwyzszy punkt
     //mozna by to przeniesc do odddzielnej funkcji
     int hpx=pom.size().width, hpy=pom.size().height;

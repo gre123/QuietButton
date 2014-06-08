@@ -23,7 +23,7 @@ modelE::~modelE()
     //dtor
 }
 
-Mat modelE::detekcjaE(Mat frame,char &znak)
+Mat modelE::detekcja(Mat frame,char &znak)
 {
         Point2i *r,*p;
         split(frame, channel);
@@ -33,20 +33,20 @@ Mat modelE::detekcjaE(Mat frame,char &znak)
         cien = channel[2] + reka;
         threshold(cien,cien,levelBin,255,1);
         cien &= maska;
-        r=najwyzej(reka);
-        p=najwyzej(cien);
+        r=bigestPeakDetection(&reka);
+        p=bigestPeakDetection(&cien);
 
         line(tym[2], *r, *p, cv::Scalar(255), 3,8,0);
         tym[0]=reka;
         tym[1]=cien;
         merge(tym,3,polaczone);
-        znak = klawiaturaE->getKlawisz(*r,*p,dist_req);
+        znak = klawiatura->getKlawisz(*r,*p,dist_req);
         tym[2]=cv::Mat::zeros(frame.size(),CV_8UC1);
         return polaczone;
 }
 
 
-int modelE::ustawTloE(){
+int modelE::ustawTlo(){
 
     cvNamedWindow(nazwaokna, CV_WINDOW_AUTOSIZE); //Create window
     createTrackbar( "Próg1", nazwaokna, &u1, 255, 0 );
@@ -56,11 +56,10 @@ int modelE::ustawTloE(){
     while(captE1.read(frame)){ //Bedzie petla do wykrywania tla i kolek
 
         split(frame, channel);
-		if (circles.size()>0 && circles[0][2]!=10){HoughCircles( channel[0], circles, CV_HOUGH_GRADIENT, 1, channel[0].rows/3, u1, u2, 0, 0 );}
-		//metoda Mieszka I, ale zrobienie tego normalnie wymaga zrobienia struktury na kolka+boolean a nie chce mi sie tego robic
+		if (circles.size()==0 || (circles.size()>0 && circles[0][2]!=10)){HoughCircles( channel[0], circles, CV_HOUGH_GRADIENT, 1, channel[0].rows/3, u1, u2, 0, 0 );}
 
-        for( size_t i = 0; i < circles.size(); i++ )
-        {
+
+        for( size_t i = 0; i < circles.size(); i++ ){
             Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
             int radius = cvRound(circles[i][2]);
             circle( channel[0], center, 3, Scalar(0,255,0), -1, 8, 0 );      // circle center
@@ -96,15 +95,18 @@ int modelE::ustawTloE(){
     maska = cv::Mat::zeros(tlo.size(),CV_8UC1);
     maska(boundingrect) = 255;
 
-    klawiaturaE=new keyboard(264,120);
-    klawiaturaE->setKeyboard(&brzegi);
-    klawiaturaE->translateKeyboardCordsElp(25);
+    klawiatura=new keyboard(264,120);
+    klawiatura->setKeyboard(&brzegi);
+    klawiatura->translateKeyboardCords(24);
+    klawiatura->drawKeyBoard(frame);
+    cvNamedWindow("klawiatura", CV_WINDOW_AUTOSIZE);
+    imshow("klawiatura",frame);
     tym[2]=cv::Mat::zeros(tlo.size(),CV_8UC1);
 
     return 0;
 }
 
-int modelE::ustawRekeE(){
+int modelE::ustawReke(){
 
     cvNamedWindow(nazwaokna2, CV_WINDOW_AUTOSIZE); //Create window
 
@@ -112,8 +114,8 @@ int modelE::ustawRekeE(){
     createTrackbar( "Tb (Cb<Tb)", nazwaokna2, &tb, 255, 0 );
     createTrackbar( "Tc (Tc<Cb)", nazwaokna2, &tc, 255, 0 );
     createTrackbar( "Td (Cb<Td)", nazwaokna2, &td, 255, 0 );
-    createTrackbar( "Ymin (Ymin<Y)", nazwaokna2, &ymin, 255, 0 );
-    createTrackbar( "Ymax (Y<Ymax)", nazwaokna2, &ymax, 255, 0 );
+   // createTrackbar( "Ymin (Ymin<Y)", nazwaokna2, &ymin, 255, 0 );
+   // createTrackbar( "Ymax (Y<Ymax)", nazwaokna2, &ymax, 255, 0 );
 
 
     while(captE1.read(frame)){
@@ -141,7 +143,7 @@ int modelE::ustawRekeE(){
 }
 
 
-int modelE::ustawCienE(){
+int modelE::ustawCien(){
 
 
     cvNamedWindow(nazwaokna3, CV_WINDOW_AUTOSIZE); //Create window
@@ -171,7 +173,7 @@ int modelE::ustawCienE(){
 
 
 
-int modelE::ustawKlikE()
+int modelE::ustawKlik()
 {
 
 
@@ -191,8 +193,8 @@ int modelE::ustawKlikE()
         cien = channel[2] + reka;
         threshold(cien,cien,levelBin,255,1);
         cien &= maska;
-        r=najwyzej(reka);
-        p=najwyzej(cien);
+        r=bigestPeakDetection(&reka);
+        p=bigestPeakDetection(&cien);
 
         line(tym[2], *r, *p, cv::Scalar(255), 3,8,0);
         tym[0]=reka;

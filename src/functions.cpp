@@ -184,7 +184,7 @@ void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2,int Cb1,int Cb2,int Cr1,
     cvtColor(obr,w_ycbcr,CV_RGB2YCrCb);
     split(w_ycbcr,kanaly);
     inRange(kanaly[1],Cb1,Cb2,CbInRange);
-    inRange(kanaly[2],Cr1,Cb2,CrInRange);
+    inRange(kanaly[2],Cr1,Cr2,CrInRange);
 
     bitwise_and(CbInRange,CrInRange,CbAndCR);
 

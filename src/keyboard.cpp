@@ -182,10 +182,13 @@ char keyboard::getKlawisz(Point2i palecPoint, Point2i cienPoint,float minimalDis
 int distance=(palecPoint.x-cienPoint.x)*(palecPoint.x-cienPoint.x)+(palecPoint.y-cienPoint.y)*(palecPoint.y-cienPoint.y);
 
 if (distance<minimalDist){
+
    // cout<<palecPoint.x<<"---"<<palecPoint.y<<endl;
     for(int i=0;i<klawisze->size();i++){
+
         if (klawisze->at(i).x<palecPoint.x && klawisze->at(i).y<palecPoint.y
             &&klawisze->at(i).width+klawisze->at(i).x>palecPoint.x && klawisze->at(i).height+klawisze->at(i).y>palecPoint.y){
+
             return klawisze->at(i).character;
             }
     }

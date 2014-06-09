@@ -3,19 +3,22 @@
 modelT::modelT()
 {
     capt1.open(0);
-    Mat templateImage = imread("video/temp8x6.png", 0 );
+    templateImage = imread("video/temp8x6.png", 0 );
     klawiatura=new keyboard(254,148,KB_WHITE);
-    background= findBackGround(capt1,klawiatura,templateImage);
-    background.copyTo(tempImg);
-    klawiatura->translateKeyboardCords(17);
-    klawiatura->drawKeyBoard(tempImg);
+
 }
 
 modelT::~modelT()
 {
     //dtor
 }
-
+int modelT::ustawDomyslne(VideoCapture cap)
+{
+    background= findBackGround(cap,klawiatura,templateImage);
+    background.copyTo(tempImg);
+    klawiatura->translateKeyboardCords(17);
+    klawiatura->drawKeyBoard(tempImg);
+}
 Mat modelT::detekcja(Mat frame,char &znak)
 {
     cien_palec(frame,background,dlon,cien,a,b,c,d,levelThresh);
@@ -29,8 +32,14 @@ Mat modelT::detekcja(Mat frame,char &znak)
     return frame;
 }
 
+
 int modelT::ustawReke()
 {
+    background= findBackGround(capt1,klawiatura,templateImage);
+    background.copyTo(tempImg);
+    klawiatura->translateKeyboardCords(17);
+    klawiatura->drawKeyBoard(tempImg);
+
     if(!capt1.isOpened()){ return -1;}
     char* mainWindowName = "Ustaw reke";
     char* cienWindowName = "Ustaw cien";

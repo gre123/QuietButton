@@ -22,9 +22,10 @@ class modelT
         keyboard *klawiatura;
         INPUT ip;
 
-        Mat frame,frame2,frameGray,result,background,tempImg,dlon,cien;
+        Mat frame,frame2,frameGray,result,background,tempImg,dlon,cien,templateImage;
         modelT();
         virtual ~modelT();
+        int ustawDomyslne(VideoCapture cap);
         int ustawReke();
         int ustawKlik();
         Mat detekcja(Mat frame,char &znak);

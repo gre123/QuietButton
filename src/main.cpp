@@ -156,28 +156,35 @@ int klawiatura_zfilmu(string sciezka){
         cout<<"Wystapil problem"<<endl;
         return -1;
     }
+    if((model==KB_COLOR)&&(md_kolorowy.ustawDomyslne(cap2)==-1))
+    {
+                cout<<"Nastapil blad z ustawieniem domyslnych"<<endl;
+                return -1;
+    }
+    if((model==KB_WHITE)&&(md_bialy.ustawDomyslne(cap2)==-1))
+    {
+                cout<<"Nastapil blad z ustawieniem domyslnych"<<endl;
+                return -1;
+    }
     cvNamedWindow("ZFilmu", CV_WINDOW_AUTOSIZE); //Create window
     Mat wynik;
     char znak;
     int licznik;
 
+
+
     while(cap2.read(frame)){
-        std::ostringstream str ;
+     std::ostringstream str ;
         str << "Nacisnieto: " ;
 
         if(model==KB_COLOR){
-            if(bylaKalibracja) wynik=md_kolorowy.detekcja(frame,znak);
-            else{
-                    destroyAllWindows();
-                    return -1;
-            }
+
+            wynik=md_kolorowy.detekcja(frame,znak);
+
         }
         else{
-                if(bylaKalibracjaT) wynik=md_bialy.detekcja(frame,znak);
-                else{
-                    destroyAllWindows();
-                    return -1;
-                }
+                 wynik=md_bialy.detekcja(frame,znak);
+
         }
 
         if (znak!=0 && znak!='+' && znak!='-' && znak!='<' && znak!='>'){
@@ -302,6 +309,7 @@ int main(){
                 scanf("%s",sciezk);
                 if(klawiatura_zfilmu(sciezk)==-1) {
                     cout<<"Nastapil blad w tej opcji"<<endl;
+                    return 0;
                 }
                 break;
             }

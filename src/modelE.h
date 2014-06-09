@@ -33,11 +33,12 @@ class modelE
         int ymin=0;
         int ymax=255;
         int levelBin=10;
-        int dist_req=35;
+        int dist_req=1200;
         char key;
 
         modelE();
         virtual ~modelE();
+        int ustawDomyslne(VideoCapture cap);
         int ustawTlo();
         int ustawReke();
         int ustawCien();

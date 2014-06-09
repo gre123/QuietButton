@@ -1,11 +1,6 @@
 #include "functions.h"
 #define PI 3.14
-extern int a;
-extern int b;
-extern int c;
-extern int d;
-extern int e;
-extern int f;
+
 /**
  * Rotate an image
  */
@@ -196,8 +191,8 @@ void cien_palec(Mat obr,Mat &tlo,Mat &wynik,Mat &wynik2,int Cb1,int Cb2,int Cr1,
     CbAndCR.copyTo(dlon);
     erode(dlon,dlon,element);
     dlon.copyTo(wynik);
-
-    absdiff(binaryDifference,CbAndCR,cien);
+    bitwise_not(CbAndCR,CbAndCR);
+    bitwise_and(binaryDifference,CbAndCR,cien);
     dilate(cien,cien,element);
     cien.copyTo(wynik2);
 }

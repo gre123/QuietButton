@@ -5,7 +5,6 @@ modelT::modelT()
     capt1.open(0);
     templateImage = imread("video/temp8x6.png", 0 );
     klawiatura=new keyboard(254,148,KB_WHITE);
-
 }
 
 modelT::~modelT()
@@ -113,7 +112,7 @@ int modelT::ustawKlik()
     return 0;
 }
 void modelT::dopelnieniekonstruktora(){
+    background= findBackGround(capt1,klawiatura,templateImage);
     klawiatura->translateKeyboardCords(17);
-    klawiatura->drawKeyBoard(tempImg);
 }
 

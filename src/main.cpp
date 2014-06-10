@@ -322,7 +322,7 @@ int main(){
             {
                 if(model==KB_COLOR) {
                     model=KB_WHITE;
-                    //md_bialy.dopelnieniekonstruktora();
+                    md_bialy.dopelnieniekonstruktora();
                     }
 
                 else model=KB_COLOR;

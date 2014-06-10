@@ -29,6 +29,7 @@ class modelT
         int ustawReke();
         int ustawKlik();
         Mat detekcja(Mat frame,char &znak);
+        void dopelnieniekonstruktora();
 };
 
 #endif // MODELT_H

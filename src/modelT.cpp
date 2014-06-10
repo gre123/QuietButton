@@ -112,4 +112,8 @@ int modelT::ustawKlik()
     destroyAllWindows();
     return 0;
 }
+void modelT::dopelnieniekonstruktora(){
+    klawiatura->translateKeyboardCords(17);
+    klawiatura->drawKeyBoard(tempImg);
+}
 

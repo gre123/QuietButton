@@ -153,17 +153,20 @@ int klawiatura_zfilmu(string sciezka){
     VideoCapture cap2(sciezka);
     if(!cap2.isOpened())
     {
-        cout<<"Wystapil problem"<<endl;
+        cout<<"Wystapil problemz otwieraniem pliku."<<endl;
+        Sleep(1000);
         return -1;
     }
     if((model==KB_COLOR)&&(md_kolorowy.ustawDomyslne(cap2)==-1))
     {
-                cout<<"Nastapil blad z ustawieniem domyslnych"<<endl;
+                cout<<"Nastapil blad z ustawieniem domyslnych wartosci."<<endl;
+                Sleep(1000);
                 return -1;
     }
-    if((model==KB_WHITE)&&(md_bialy.ustawDomyslne(cap2)==-1))
+    if(model==KB_WHITE)
     {
-                cout<<"Nastapil blad z ustawieniem domyslnych"<<endl;
+                cout<<"Wejscie z pliku przeznaczone jest dla modelu kolorowego, ustaw go."<<endl;
+                Sleep(1000);
                 return -1;
     }
     cvNamedWindow("ZFilmu", CV_WINDOW_AUTOSIZE); //Create window
@@ -223,9 +226,11 @@ int main(){
    ip.ki.time = 0;             //
    ip.ki.dwExtraInfo = 0;      //
    ip.ki.dwFlags = 0; // 0 for key press
-   if (!capture.isOpened()){cout << "Nie znalazlem kamery!" << endl;return -1;}
-    capture.set(CV_CAP_PROP_FRAME_WIDTH, 800);
-    capture.set(CV_CAP_PROP_FRAME_HEIGHT, 600);
+   if (!capture.isOpened()){cout << "Nie znalazlem kamery!" << endl;//return -1;
+   }else{
+        capture.set(CV_CAP_PROP_FRAME_WIDTH, 800);
+        capture.set(CV_CAP_PROP_FRAME_HEIGHT, 600);
+   }
 
 ///Menu
     do{
@@ -308,14 +313,18 @@ int main(){
                 cout<<"Podaj bezwzgledna sciezke do filmu"<<endl;
                 scanf("%s",sciezk);
                 if(klawiatura_zfilmu(sciezk)==-1) {
-                    cout<<"Nastapil blad w tej opcji"<<endl;
+                    cout<<"Nastapil blad w przetwarzaniu filmu."<<endl;
                     return 0;
                 }
                 break;
             }
             case 'm':
             {
-                if(model==KB_COLOR) model=KB_WHITE;
+                if(model==KB_COLOR) {
+                    model=KB_WHITE;
+                    //md_bialy.dopelnieniekonstruktora();
+                    }
+
                 else model=KB_COLOR;
                 break;
             }

@@ -5,7 +5,7 @@ modelT::modelT()
     capt1.open(0);
     capt1.set(CV_CAP_PROP_FRAME_WIDTH, 800);
     capt1.set(CV_CAP_PROP_FRAME_HEIGHT, 600);
-    templateImage = imread("video/t4.bmp", 0 );
+    templateImage = imread("video/temp8x6.png", 0 );
     klawiatura=new keyboard(254,148,KB_WHITE);
 }
 
@@ -26,7 +26,6 @@ Mat modelT::detekcja(Mat frame,char &znak)
     return frame;
 }
 
-
 int modelT::ustawReke()
 {
     background= findBackGround(capt1,klawiatura,templateImage);
@@ -35,15 +34,14 @@ int modelT::ustawReke()
     klawiatura->drawKeyBoard(tempImg);
 
     if(!capt1.isOpened()){ return -1;}
-    char* mainWindowName = "Ustaw reke";
-    char* cienWindowName = "Ustaw cien";
+
   //  char* klawWindowName = "Wykryta klawiatura";
 
     cvNamedWindow(mainWindowName, CV_WINDOW_AUTOSIZE); //Create window
-    cvNamedWindow(cienWindowName, CV_WINDOW_AUTOSIZE);
+
  //   cvNamedWindow(klawWindowName, CV_WINDOW_AUTOSIZE);
  //   imshow(klawWindowName,tempImg);
-    Mat dlon,cien;
+ //   Mat dlon,cien;
 
     createTrackbar( "Ta (Ta<Cb)", mainWindowName, &a, 255, 0 );
     createTrackbar( "Tb (Cb<Tb)", mainWindowName, &b, 255, 0 );
@@ -54,6 +52,26 @@ int modelT::ustawReke()
 
         cien_palec(frame,background,dlon,cien,a,b,c,d,levelThresh);
         imshow(mainWindowName, dlon);
+    //    imshow(cienWindowName, cien);
+
+        if(waitKey(30) == 27){
+            cout << "esc key is pressed by user" << endl;break;
+        }
+        if(waitKey(30) == 13){
+            cout << "wcisnieto ENTER" << endl;break;
+        }
+
+    }
+    destroyWindow(mainWindowName);
+    return 0;
+}
+int modelT::ustawCien()
+{
+    cvNamedWindow(cienWindowName, CV_WINDOW_AUTOSIZE);
+    createTrackbar( "level", cienWindowName, &levelThresh, 255, 0 );
+    while(capt1.read(frame)){
+
+        cien_palec(frame,background,dlon,cien,a,b,c,d,levelThresh);
         imshow(cienWindowName, cien);
 
         if(waitKey(30) == 27){

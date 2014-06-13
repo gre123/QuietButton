@@ -106,6 +106,7 @@ int modelE::ustawDomyslne(VideoCapture cap)
 
     return 0;
 }
+
 int modelE::ustawTlo(){
 
     cvNamedWindow(nazwaokna, CV_WINDOW_AUTOSIZE); //Create window

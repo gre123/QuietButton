@@ -21,12 +21,15 @@ class modelT
         int dist_reqT=35;
         keyboard *klawiatura;
         INPUT ip;
+        char* mainWindowName = "Ustaw reke";
+        char* cienWindowName = "Ustaw cien";
 
         Mat frame,frame2,frameGray,result,background,tempImg,dlon,cien,templateImage;
         modelT();
         virtual ~modelT();
         int ustawReke();
         int ustawKlik();
+        int ustawCien();
         Mat detekcja(Mat frame,char &znak);
         void dopelnieniekonstruktora();
 };

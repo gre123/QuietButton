@@ -264,18 +264,7 @@ int main(){
             {
                 if(model==KB_COLOR){
 
-                    if(bylaKalibracja)
-                    {
-                        system("cls");
-                        cout<<"Czy zresetowac poprzednie ustawienia?"<<endl;
-                        cout<<"T/N"<<endl;
-                        cin>>option;
-                        if(option=='T')
-                        {
 
-                        }
-                        option='k';
-                    }
                     ///czesc do wykrywania pozycji klawiatury
                     if(md_kolorowy.ustawTlo()==-1){
                         cout<<"Nastapil problem z ta opcja"<<endl;
@@ -301,20 +290,18 @@ int main(){
                 }
                 else if(model==KB_WHITE){
 
-                     if(bylaKalibracjaT)
-                     {
-                        system("cls");
-                        cout<<"Czy zresetowac poprzednie ustawienia?"<<endl;
-                        cout<<"T/N"<<endl;
-                        cin>>option;
-                        if(option=='T')
-                        {
-
-                        }
-                        option='k';
-                     }
-                    if(md_bialy.ustawReke()==-1) return 0;
-                    if(md_bialy.ustawKlik()==-1) return 0;
+                    if(md_bialy.ustawReke()==-1){
+                        cout<<"Nastapil problem z ta opcja"<<endl;
+                        break;
+                    };
+                    if(md_bialy.ustawCien()==-1){
+                        cout<<"Nastapil problem z ta opcja"<<endl;
+                        break;
+                    };
+                    if(md_bialy.ustawKlik()==-1){
+                        cout<<"Nastapil problem z ta opcja"<<endl;
+                        break;
+                    };
                     bylaKalibracjaT=true;
                 }
                 break;

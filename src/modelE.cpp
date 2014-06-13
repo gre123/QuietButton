@@ -138,12 +138,12 @@ int modelE::ustawTlo(){
                 if (circles.size()==4){  //zmien na ==4
                     cout << "Nacisnieto ENTER, sa 4 kolka" << endl;
                     frame.copyTo(tlo);
-                    destroyAllWindows();
                     break;
                 } else {cout << "Nacisnieto ENTER, ale kolek jest: " << circles.size() << endl;}
 
         }
     }
+
     sortCircles(&circles);
     brzegi = vec3fToPoint(circles);
         brzegi[0].x=brzegi[0].x; //-0.8*circles[0][2]; //lg
@@ -162,7 +162,7 @@ int modelE::ustawTlo(){
     cvNamedWindow("klawiatura", CV_WINDOW_AUTOSIZE);
     imshow("klawiatura",frame);
     tym[2]=cv::Mat::zeros(tlo.size(),CV_8UC1);
-
+    destroyAllWindows();
     return 0;
 }
 
@@ -199,6 +199,7 @@ int modelE::ustawReke(){
             break;
         }
     }
+    destroyAllWindows();
     return 0;
 }
 
@@ -224,13 +225,12 @@ int modelE::ustawCien(){
             return -1;
         }else if (key == 13) {
             cout << "Nacisnieto ENTER, parametry wykrywania cienia zapisane" << endl;
-            destroyAllWindows();
             break;
         }
     }
+    destroyAllWindows();
     return 0;
 }
-
 
 
 int modelE::ustawKlik()
@@ -268,17 +268,16 @@ int modelE::ustawKlik()
         key = cvWaitKey(10);
         if (key == 27){
             cout << "Nacisnieto ESC" << endl;
-            destroyAllWindows();
-            return -1;
+            break;
         }
         if (key == 13) {
             dist_req=(r->x-p->x)*(r->x-p->x)+(r->y-p->y)*(r->y-p->y) -20;
             cout << "Nacisnieto ENTER, odleglosc zapisana " << endl;
-            destroyAllWindows();
             break;
         }
 
 
 }
+    destroyAllWindows();
     return 0;
 }

@@ -254,7 +254,6 @@ int main(){
         cout<<"Odpal klawiature jako standard. (s)"<<endl;
         cout<<"Odpal klawiature - podglad wyniku (w)"<<endl;
         cout<<"Zmiana modelu klawiatury (m)"<<endl;
-        cout<<"Wczytaj znaki z filmu (f)"<<endl;
         cout<<"Wyjscie (q)"<<endl;
         }
 
@@ -264,18 +263,56 @@ int main(){
             case 'k':
             {
                 if(model==KB_COLOR){
+
+                    if(bylaKalibracja)
+                    {
+                        system("cls");
+                        cout<<"Czy zresetowac poprzednie ustawienia?"<<endl;
+                        cout<<"T/N"<<endl;
+                        cin>>option;
+                        if(option=='T')
+                        {
+
+                        }
+                        option='k';
+                    }
                     ///czesc do wykrywania pozycji klawiatury
-                    if(md_kolorowy.ustawTlo()==-1) return 0;
+                    if(md_kolorowy.ustawTlo()==-1){
+                        cout<<"Nastapil problem z ta opcja"<<endl;
+                        break;
+                    };
                     ///teraz czesc do ustawiania parametrow modelu koloru skory
                     //destroyAllWindows();
-                    if(md_kolorowy.ustawReke()==-1) return 0;
+                    if(md_kolorowy.ustawReke()==-1){
+                        cout<<"Nastapil problem z ta opcja"<<endl;
+                        break;
+                    };
                     ///Teraz czesc do ustawiania parametrow wykrywania cienia
-                    if(md_kolorowy.ustawCien()==-1) return 0;
+                    if(md_kolorowy.ustawCien()==-1){
+                        cout<<"Nastapil problem z ta opcja"<<endl;
+                        break;
+                    };
 
-                    if(md_kolorowy.ustawKlik()==-1) return 0;
+                    if(md_kolorowy.ustawKlik()==-1){
+                        cout<<"Nastapil problem z ta opcja"<<endl;
+                        break;
+                    };
                     bylaKalibracja=true;
                 }
                 else if(model==KB_WHITE){
+
+                     if(bylaKalibracjaT)
+                     {
+                        system("cls");
+                        cout<<"Czy zresetowac poprzednie ustawienia?"<<endl;
+                        cout<<"T/N"<<endl;
+                        cin>>option;
+                        if(option=='T')
+                        {
+
+                        }
+                        option='k';
+                     }
                     if(md_bialy.ustawReke()==-1) return 0;
                     if(md_bialy.ustawKlik()==-1) return 0;
                     bylaKalibracjaT=true;
@@ -300,11 +337,11 @@ int main(){
             }
             case 'p':
             {
-                cout<<"Podaj bezwzgledna sciezke do zapisu"<<endl;
+                cout<<"Podaj sciezke do zapisu"<<endl;
                 scanf("%s",sciezk);
                 if(klawiatura_dopliku(sciezk)==-1){
-                 cout<<"Nastapil problem z ta opcja"<<endl;
-                 return 0;
+                 cout<<"Nastapil problem z ta opcja"<<endl<<"Sprobuj wpisac poprawna sciezke"<<endl;
+                 cin>>option;
                 }
                 break;
             }
@@ -313,8 +350,8 @@ int main(){
                 cout<<"Podaj bezwzgledna sciezke do filmu"<<endl;
                 scanf("%s",sciezk);
                 if(klawiatura_zfilmu(sciezk)==-1) {
-                    cout<<"Nastapil blad w przetwarzaniu filmu."<<endl;
-                    return 0;
+                    cout<<"Nastapil blad w przetwarzaniu filmu."<<endl<<"Sprobuj wpisac poprawna sciezke"<<endl;
+                    cin>>option;
                 }
                 break;
             }
@@ -322,7 +359,7 @@ int main(){
             {
                 if(model==KB_COLOR) {
                     model=KB_WHITE;
-                    md_bialy.dopelnieniekonstruktora();
+                //    md_bialy.dopelnieniekonstruktora();
                     }
 
                 else model=KB_COLOR;

@@ -10,8 +10,6 @@ struct key{
 char character;
 float x,y;
 float width,height;
-///
-Point2i vertex[4];
 };
 class keyboard{
 public:
@@ -19,6 +17,7 @@ keyboard(float _widthReal,float _heightReal,int opcja=KB_COLOR);
 
 float widthReal,heightReal;//w milimetrach
 private:
+bool shifFlag;
 std::vector<key> *klawisze;
 std::vector<cv::Point> * markers;
 public:
@@ -27,6 +26,5 @@ void setKeyboard(std::vector<cv::Point> * _markers);
 void drawKeyBoard(cv::Mat &image);
 void translateKeyboardCords(float markerSize);
 char getKlawisz(Point2i palecPoint, Point2i cienPoint,float minimalDist);
-void setCameraCord(int &x,int &y);
 };
 #endif

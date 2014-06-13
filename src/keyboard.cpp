@@ -6,15 +6,6 @@ x=_x;
 y=_y;
 width=_width;
 height=_height;
-//
-vertex[0].x=x;
-vertex[0].y=y;
-vertex[1].x=x+width;
-vertex[1].y=y;
-vertex[2].x=x;
-vertex[2].y=y+height;
-vertex[3].x=x+width;
-vertex[3].y=y+height;
 
 }
 
@@ -22,6 +13,7 @@ void keyboard::setKeyboard(std::vector<cv::Point> * _markers){
 markers=_markers;
 }
 keyboard::keyboard(float _widthReal,float _heightReal,int opcja){
+shifFlag=false;
 widthReal=_widthReal;
 heightReal=_heightReal;
 klawisze=new std::vector<key>();
@@ -61,6 +53,8 @@ klawisze->push_back(key((char)15,0,72,24,24));
 klawisze->push_back(key((char)32,24,72,168,24));
 
 klawisze->push_back(key((char)13,192,48,48,48));
+
+klawisze->push_back(key((char)15,0,72,24,24));//shift
 }
 else if(opcja==KB_WHITE){
         float defaultSize=23.5;
@@ -86,7 +80,7 @@ klawisze->push_back(key('q',defaultSize*i++,prevSizeY,defaultSize,defaultSizeY))
 klawisze->push_back(key('w',defaultSize*i++,prevSizeY,defaultSize,defaultSizeY));
 klawisze->push_back(key('e',defaultSize*i++,prevSizeY,defaultSize,defaultSizeY));
 klawisze->push_back(key('r',defaultSize*i++,prevSizeY,defaultSize,defaultSizeY));
-klawisze->push_back(key(KB_WHITE,defaultSize*i++,prevSizeY,defaultSize,defaultSizeY));
+klawisze->push_back(key('t',defaultSize*i++,prevSizeY,defaultSize,defaultSizeY));
 klawisze->push_back(key('y',defaultSize*i++,prevSizeY,defaultSize,defaultSizeY));
 klawisze->push_back(key('u',defaultSize*i++,prevSizeY,defaultSize,defaultSizeY));
 klawisze->push_back(key('i',defaultSize*i++,prevSizeY,defaultSize,defaultSizeY));
@@ -163,36 +157,29 @@ for (int i=0;i<klawisze->size();i++){
 }
 }
 
-void keyboard::setCameraCord(int &x,int &y){
-float xCof=(markers->at(1).x-markers->at(0).x)/(float)widthReal;
-float yCof=(markers->at(2).y-markers->at(0).y)/(float)heightReal;
-float xCof1=(markers->at(3).x-markers->at(2).x)/(float)widthReal;
-float yCof1=(markers->at(3).y-markers->at(1).y)/(float)heightReal;
-
-float heightShift=markers->at(1).y-markers->at(0).y;
-float widthShift=markers->at(2).x-markers->at(0).x;
-
-int tx=x;
-int ty=y;
-x=(x*(xCof*(ty/heightReal)+xCof1*(heightReal-ty)/heightReal))+(ty/heightReal)*markers->at(0).x+(heightReal-ty)/heightReal*markers->at(2).x;
-y=(y*(yCof*(tx/widthReal)+yCof1*(widthReal-tx)/widthReal))+(tx/widthReal)*markers->at(0).y+(widthReal-tx)/widthReal*markers->at(1).y;
-//cout<<x<<"###"<<y<<endl;
-}
 char keyboard::getKlawisz(Point2i palecPoint, Point2i cienPoint,float minimalDist=1200){
 int distance=(palecPoint.x-cienPoint.x)*(palecPoint.x-cienPoint.x)+(palecPoint.y-cienPoint.y)*(palecPoint.y-cienPoint.y);
-
+char znak=0;
 if (distance<minimalDist){
-
    // cout<<palecPoint.x<<"---"<<palecPoint.y<<endl;
     for(int i=0;i<klawisze->size();i++){
-
         if (klawisze->at(i).x<palecPoint.x && klawisze->at(i).y<palecPoint.y
             &&klawisze->at(i).width+klawisze->at(i).x>palecPoint.x && klawisze->at(i).height+klawisze->at(i).y>palecPoint.y){
-
-            return klawisze->at(i).character;
+            znak=klawisze->at(i).character;
+            break;
             }
     }
-    return 0;
+    if (znak!=0){
+        if (znak==(char)15){
+            shifFlag=!shifFlag;
+        }else if((znak>=(char)97 )&& (znak<=(char)122)){
+            if (shifFlag==true){
+                znak=znak-32;
+            }
+            return znak;
+        }else {return znak;}
+    }else{return 0;}
+
 
 }else{return 0;}
 
